@@ -7,6 +7,7 @@
     display: flex;
     min-height: 100vh;
     background: url(./assets/bg.jpg) no-repeat center;
+    background-size: cover;
 }
 
 .content {
