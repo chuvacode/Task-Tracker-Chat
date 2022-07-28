@@ -1,20 +1,16 @@
+* {
+    box-sizing: border-box;
+    font-family: 'SF UI Display';
+}
+
 .App {
     display: flex;
     min-height: 100vh;
-}
-
-:root {
-    --w: 250px;
-}
-
-.sidebar {
-    flex: 0 0 var(--w);
-    background: #cdcdcd;
-    width: 100%;
+    background: url(./assets/bg.jpg) no-repeat center;
 }
 
 .content {
-    flex: 0 0 calc(100% - var(--w));
-    background: #cdcddd;
+    flex: 0 0 calc(100% - var(--width-sidebar));
     width: 100%;
 }
+

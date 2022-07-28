@@ -1,0 +1,39 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    padding: 24px 30px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 0.02em;
+    color: #262F56;
+    text-decoration: none;
+}
+
+.link:hover {
+    background: rgba(227, 227, 247, 0.3);
+}
+
+.linkActive {
+    font-weight: 600;
+}
+
+.counter {
+    padding: 5px 8px;
+    border-radius: 50px;
+    margin-left: auto;
+    background: rgba(49, 126, 246, 1);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+}
