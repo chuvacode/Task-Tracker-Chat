@@ -3,6 +3,8 @@ import Chat from "./Chat";
 
 let mapStateToProps = state => {
   return {
+    messages: state.chat.messages,
+    profileId: state.profile.profileId
   };
 };
 

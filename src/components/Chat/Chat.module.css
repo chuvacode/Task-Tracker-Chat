@@ -2,6 +2,7 @@
     display: flex;
     width: 100%;
     height: 100%;
+    max-height: 100%;
     background: #FAF9FC;
     padding: 50px 60px;
 }
@@ -170,109 +171,11 @@
 .messenger {
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+}
+.messenger::-webkit-scrollbar {
+    display: none;
 }
 
-.message {
-    display: flex;
-    margin-top: 30px;
-}
 
-.messageInfo {
-    margin-right: 16px;
-}
 
-.messageTime {
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    color: #454D57;
-    text-align: center;
-}
-
-.profileImage {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-
-}
-.profileName {
-    font-weight: 600;
-    font-size: 13px;
-    color: #000000;
-
-}
-.messageContent {
-    padding: 15px 20px;
-    background: linear-gradient(270deg, rgba(234, 232, 237, 0.8) 0%, rgba(234, 232, 237, 0.5) 100%);
-    border-radius: 20px;
-}
-
-.messageText {
-    margin-top: 5px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 130%;
-    color: #2B3036;
-}
-
-.myMessage {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-end;
-    margin-top: 30px;
-}
-
-.myMessage .messageContent {
-    background: #317EF6;
-}
-
-.myMessage .messageText {
-    color: #f5f5f5;
-}
-
-.myMessage .messageInfo {
-    display: flex;
-    margin: 10px 0 0 0;
-    justify-content: flex-end;
-}
-
-.formNewMessage {
-    display: flex;
-    background: #FFFFFF;
-    border-radius: 7px;
-    margin-top: auto;
-    padding: 15px 20px;
-    box-shadow: 0px 2.26326px 4.52652px rgba(237, 237, 245, 0.5);
-}
-
-.formNewMessage input {
-    width: 100%;
-    margin-right: 20px;
-    outline: none!important;
-    border: none;
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 14px;
-    letter-spacing: 0.02em;
-}
-
-.formNewMessage input::-webkit-input-placeholder {
-    color: rgba(0, 0, 0, 0.2);
-}
-
-.formNewMessage button {
-    cursor: pointer;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     min-width: 40px;
-     min-height: 40px;
-     background: #317EF6;
-     border-radius: 50%;
-     border: none;
- }
-
-.formNewMessage button svg {
-    width: 20px;
-    height: 20px;
-}

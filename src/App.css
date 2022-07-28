@@ -5,7 +5,8 @@
 
 .App {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     background: url(./assets/bg.jpg) no-repeat center;
     background-size: cover;
 }
