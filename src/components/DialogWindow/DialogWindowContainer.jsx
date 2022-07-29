@@ -3,7 +3,11 @@ import DialogWindow from "./DialogWindow";
 
 let mapStateToProps = state => {
   return {
-    dialog: state.chat.dialogs[0],
+    dialog: (state.chat.dialogs.filter(dialog => {
+      if (dialog.id === state.chat.currentDialogID) {
+        return dialog;
+      }
+    }))[0],
     profileId: state.profile.profileId
   }
 };

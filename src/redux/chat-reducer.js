@@ -4,6 +4,7 @@ let initialState = {
       id: 1,
       type: "group",
       name: "Пройти инструктаж по безопасности",
+      image: "https://picsum.photos/100/100?random=1",
       description: "Отдел охраны труда",
       messages: [
         {
@@ -62,6 +63,7 @@ let initialState = {
       id: 2,
       type: "group",
       name: "Реализация товаров и услуг",
+      image: "https://picsum.photos/100/100?random=2",
       description: "Отдел продаж",
       messages: [
         {
@@ -120,6 +122,7 @@ let initialState = {
       id: 3,
       type: "group",
       name: "Провести обучение новых сотрудни...",
+      image: "https://picsum.photos/100/100?random=3",
       description: "Отдел продаж",
       messages: [
         {
@@ -175,6 +178,7 @@ let initialState = {
       ],
     }
   ],
+  activeType: "group",
   currentDialogID: 1,
   textNewMessage: "",
   countNewMessages: 1
@@ -182,6 +186,7 @@ let initialState = {
 
 let UPDATE_TEXT_NEW_MESSAGE = "UPDATE_TEXT_NEW_MESSAGE";
 let ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
+let SET_ACTIVE_DIALOG = "SET_ACTIVE_DIALOG";
 
 let ChatReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -221,6 +226,11 @@ let ChatReducer = (state = initialState, action) => {
         }),
         textNewMessage: ""
       };
+    case SET_ACTIVE_DIALOG:
+      return {
+        ...state,
+        currentDialogID: action.dialogID
+      };
     default:
       return state;
   }
@@ -236,6 +246,13 @@ export let updateTextNewMessageAC = (text) => {
 export let addNewMessageAC = () => {
   return {
     type: ADD_NEW_MESSAGE
+  }
+};
+
+export let setActiveDialogAC = (dialogID) => {
+  return {
+    type: SET_ACTIVE_DIALOG,
+    dialogID: dialogID
   }
 };
 

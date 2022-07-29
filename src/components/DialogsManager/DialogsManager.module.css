@@ -69,12 +69,20 @@
 }
 
 .dialog {
+    cursor: pointer;
     display: flex;
     background: #FFFFFF;
     padding: 18px 16px;
     border-radius: 7px;
     box-shadow: 0px 9.05305px 18.1061px #EDEDF5;
     margin-bottom: 15px;
+    transition: all .5s ease;
+}
+
+.dialog.active {
+
+    transform: translateX(20px);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .dialog__image {

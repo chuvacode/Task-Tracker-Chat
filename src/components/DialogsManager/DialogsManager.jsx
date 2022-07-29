@@ -12,39 +12,27 @@ let DialogsManager = props => {
         <input type="text" placeholder="Поиск"/>
       </div>
       <div className={Style.dialogs}>
-        <div className={Style.dialog}>
-          <img className={Style.dialog__image} src="https://picsum.photos/100/100?random=1"/>
-          <div className={Style.dialog__info}>
-            <div className={Style.dialog__title}>Пройти инструктаж по безопасности</div>
-            <div className={Style.dialog__subtitle}>Отдел охраны труда</div>
-          </div>
-          <div className={Style.dialog__note}>
-            <div className={Style.date}>25 Фев</div>
-            <div className={Style.countNewMessage}>3</div>
-          </div>
-        </div>
-        <div className={Style.dialog}>
-          <img className={Style.dialog__image} src="https://picsum.photos/100/100?random=2"/>
-          <div className={Style.dialog__info}>
-            <div className={Style.dialog__title}>Реализация товаров и услуг</div>
-            <div className={Style.dialog__subtitle}>Отдел продаж</div>
-          </div>
-          <div className={Style.dialog__note}>
-            <div className={Style.date}>25 Фев</div>
-            <div className={Style.countNewMessage}>3</div>
-          </div>
-        </div>
-        <div className={Style.dialog}>
-          <img className={Style.dialog__image} src="https://picsum.photos/100/100?random=3"/>
-          <div className={Style.dialog__info}>
-            <div className={Style.dialog__title}>Провести обучение новых сотрудни...</div>
-            <div className={Style.dialog__subtitle}>Отдел продаж</div>
-          </div>
-          <div className={Style.dialog__note}>
-            <div className={Style.date}>25 Фев</div>
-            <div className={Style.countNewMessage}>3</div>
-          </div>
-        </div>
+        {props.dialogs.map(dialog => {
+          if (dialog.type === props.activeType) {
+            return (
+              <div className={Style.dialog + " " + (dialog.id === props.currentDialogID ? Style.active : "")}
+                   onClick={() => {
+                     props.setActiveDialog(dialog.id);
+                   }}
+                   key={dialog.id}>
+                <img className={Style.dialog__image} src={dialog.image}/>
+                <div className={Style.dialog__info}>
+                  <div className={Style.dialog__title}>Пройти инструктаж по безопасности</div>
+                  <div className={Style.dialog__subtitle}>Отдел охраны труда</div>
+                </div>
+                <div className={Style.dialog__note}>
+                  <div className={Style.date}>25 Фев</div>
+                  <div className={Style.countNewMessage}>3</div>
+                </div>
+              </div>
+            )
+          }
+        })}
       </div>
     </div>
   );

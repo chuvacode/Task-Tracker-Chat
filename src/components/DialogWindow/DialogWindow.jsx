@@ -1,7 +1,10 @@
 import Style from "./DialogWindow.module.css";
 import Message from "../Chat/Message/Message";
 import ChatInputContainer from "../Chat/ChatInput/ChatInputContainer";
-import React from "react";
+import React, {createRef} from "react";
+
+let refDialog = createRef();
+// console.log(refDialog.current.offset);
 
 let DialogWindow = props => {
   return (
@@ -10,8 +13,7 @@ let DialogWindow = props => {
         <div className={Style.dialogWindowHeader__title}>{props.dialog.name}</div>
         <div className={Style.dialogWindowHeader__subtitle}>{props.dialog.description}</div>
       </div>
-
-      <div className={Style.messenger}>
+      <div className={Style.messenger} ref={refDialog}>
         {props.dialog.messages.map(message => (
             <Message key={message.id}
                      profileImage={message.profile.image}
@@ -24,7 +26,6 @@ let DialogWindow = props => {
           )
         )}
       </div>
-
       <ChatInputContainer/>
     </div>
   )
