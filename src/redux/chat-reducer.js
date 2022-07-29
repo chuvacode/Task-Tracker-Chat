@@ -1,56 +1,181 @@
 let initialState = {
-  messages: [
+  dialogs: [
     {
       id: 1,
-      profile: {
-        id: 2534,
-        name: "Карина Привезенцева",
-        image: "https://picsum.photos/100/100?random=2534",
-      },
-      messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
-      timeSending: "11:01"
+      type: "group",
+      name: "Пройти инструктаж по безопасности",
+      description: "Отдел охраны труда",
+      messages: [
+        {
+          id: 1,
+          profile: {
+            id: 2534,
+            name: "Карина Привезенцева",
+            image: "https://picsum.photos/100/100?random=2534",
+          },
+          messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
+          timeSending: "11:01"
+        },
+        {
+          id: 2,
+          profile: {
+            id: 5466,
+            name: "Марсель Немировский",
+            image: "https://picsum.photos/100/100?random=7",
+          },
+          messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
+          timeSending: "12:17"
+        },
+        {
+          id: 3,
+          profile: {
+            id: 1,
+            name: "Чуваков Алексей",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
+          timeSending: "12:18"
+        },
+        {
+          id: 4,
+          profile: {
+            id: 246234,
+            name: "Роман Гордеев",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "☝ Уточнил: медные 60 шт.",
+          timeSending: "13:03"
+        },
+        {
+          id: 4,
+          profile: {
+            id: 1,
+            name: "Чуваков Алексей",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "Спасибо, сейчас заполню 😌",
+          timeSending: "13:07"
+        }
+      ],
     },
     {
       id: 2,
-      profile: {
-        id: 5466,
-        name: "Марсель Немировский",
-        image: "https://picsum.photos/100/100?random=7",
-      },
-      messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
-      timeSending: "12:17"
+      type: "group",
+      name: "Реализация товаров и услуг",
+      description: "Отдел продаж",
+      messages: [
+        {
+          id: 1,
+          profile: {
+            id: 2534,
+            name: "Карина Привезенцева",
+            image: "https://picsum.photos/100/100?random=2534",
+          },
+          messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
+          timeSending: "11:01"
+        },
+        {
+          id: 2,
+          profile: {
+            id: 5466,
+            name: "Марсель Немировский",
+            image: "https://picsum.photos/100/100?random=7",
+          },
+          messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
+          timeSending: "12:17"
+        },
+        {
+          id: 3,
+          profile: {
+            id: 1,
+            name: "Чуваков Алексей",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
+          timeSending: "12:18"
+        },
+        {
+          id: 4,
+          profile: {
+            id: 246234,
+            name: "Роман Гордеев",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "☝ Уточнил: медные 60 шт.",
+          timeSending: "13:03"
+        },
+        {
+          id: 4,
+          profile: {
+            id: 1,
+            name: "Чуваков Алексей",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "Спасибо, сейчас заполню 😌",
+          timeSending: "13:07"
+        }
+      ],
     },
     {
       id: 3,
-      profile: {
-        id: 1,
-        name: "Чуваков Алексей",
-        image: "https://picsum.photos/100/100?random=8",
-      },
-      messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
-      timeSending: "12:18"
-    },
-    {
-      id: 4,
-      profile: {
-        id: 246234,
-        name: "Роман Гордеев",
-        image: "https://picsum.photos/100/100?random=8",
-      },
-      messageText: "☝ Уточнил: медные 60 шт.",
-      timeSending: "13:03"
-    },
-    {
-      id: 4,
-      profile: {
-        id: 1,
-        name: "Чуваков Алексей",
-        image: "https://picsum.photos/100/100?random=8",
-      },
-      messageText: "Спасибо, сейчас заполню 😌",
-      timeSending: "13:07"
+      type: "group",
+      name: "Провести обучение новых сотрудни...",
+      description: "Отдел продаж",
+      messages: [
+        {
+          id: 1,
+          profile: {
+            id: 2534,
+            name: "Карина Привезенцева",
+            image: "https://picsum.photos/100/100?random=2534",
+          },
+          messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
+          timeSending: "11:01"
+        },
+        {
+          id: 2,
+          profile: {
+            id: 5466,
+            name: "Марсель Немировский",
+            image: "https://picsum.photos/100/100?random=7",
+          },
+          messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
+          timeSending: "12:17"
+        },
+        {
+          id: 3,
+          profile: {
+            id: 1,
+            name: "Чуваков Алексей",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
+          timeSending: "12:18"
+        },
+        {
+          id: 4,
+          profile: {
+            id: 246234,
+            name: "Роман Гордеев",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "☝ Уточнил: медные 60 шт.",
+          timeSending: "13:03"
+        },
+        {
+          id: 4,
+          profile: {
+            id: 1,
+            name: "Чуваков Алексей",
+            image: "https://picsum.photos/100/100?random=8",
+          },
+          messageText: "Спасибо, сейчас заполню 😌",
+          timeSending: "13:07"
+        }
+      ],
     }
   ],
+  currentDialogID: 1,
   textNewMessage: "",
   countNewMessages: 1
 };
@@ -68,24 +193,32 @@ let ChatReducer = (state = initialState, action) => {
     case ADD_NEW_MESSAGE:
       return {
         ...state,
-        messages: [
-          ...state.messages,
-          {
-            id: state.messages.length + 1,
-            profile: {
-              id: 1,
-              name: "Чуваков Алексей",
-              image: "https://picsum.photos/100/100?random=2534",
-            },
-            messageText: state.textNewMessage,
-            timeSending: ((DateNow) => {
-                let h = (DateNow.getHours() > 10 ? DateNow.getHours() : "0" + DateNow.getHours());
-                let m = (DateNow.getMinutes() > 10 ? DateNow.getMinutes() : "0" + DateNow.getMinutes());
-                return h + ":" + m;
-              }
-            )(new Date())
-          },
-        ],
+        dialogs: state.dialogs.map(dialog => {
+          if (state.currentDialogID === dialog.id) {
+            return {
+              ...dialog,
+              messages: [
+                ...dialog.messages,
+                {
+                  id: dialog.messages.length + 1,
+                  profile: {
+                    id: 1,
+                    name: "Чуваков Алексей",
+                    image: "https://picsum.photos/100/100?random=2534",
+                  },
+                  messageText: state.textNewMessage,
+                  timeSending: ((DateNow) => {
+                      let h = (DateNow.getHours() > 10 ? DateNow.getHours() : "0" + DateNow.getHours());
+                      let m = (DateNow.getMinutes() > 10 ? DateNow.getMinutes() : "0" + DateNow.getMinutes());
+                      return h + ":" + m;
+                    }
+                  )(new Date())
+                }
+              ]
+            }
+          }
+          return dialog;
+        }),
         textNewMessage: ""
       };
     default:

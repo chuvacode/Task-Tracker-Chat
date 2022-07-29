@@ -1,0 +1,35 @@
+.dialogWindow {
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+    width: 100%;
+    margin-top: 32px;
+}
+
+.dialogWindowHeader {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #D1D4E1;
+    padding: 20px 0;
+}
+
+.dialogWindowHeader__title {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.8);
+}
+.dialogWindowHeader__subtitle {
+    margin-top: 3px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #959CA8;
+}
+
+.messenger {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+.messenger::-webkit-scrollbar {
+    display: none;
+}

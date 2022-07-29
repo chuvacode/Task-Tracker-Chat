@@ -3,10 +3,18 @@ import Style from "./ChatInput.module.css"
 
 let ChatInput = props => {
   let refInput = createRef();
+
+  let handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      props.addNewMessage()
+    }
+  };
+
   return (
     <div className={Style.formNewMessage}>
       <input type="text" placeholder="Напишите сообщение..." value={props.textNewMessage} ref={refInput}
              onChange={() => {props.updateTextNewMessage(refInput.current.value)}}
+             onKeyPress={handleKeyPress}
       />
       <button onClick={props.addNewMessage}>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
