@@ -22,13 +22,13 @@ let DialogsManager = props => {
                    key={dialog.id}>
                 <img className={Style.dialog__image} src={dialog.image}/>
                 <div className={Style.dialog__info}>
-                  <div className={Style.dialog__title}>Пройти инструктаж по безопасности</div>
-                  <div className={Style.dialog__subtitle}>Отдел охраны труда</div>
+                  <div className={Style.dialog__title}>{dialog.name}</div>
+                  <div className={Style.dialog__subtitle}>{dialog.description}</div>
                 </div>
-                <div className={Style.dialog__note}>
+                {/*<div className={Style.dialog__note}>
                   <div className={Style.date}>25 Фев</div>
                   <div className={Style.countNewMessage}>3</div>
-                </div>
+                </div>*/}
               </div>
             )
           }

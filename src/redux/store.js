@@ -9,6 +9,8 @@ let reducers = combineReducers({
 
 let store = createStore(reducers);
 
-window.state = store.getState();
+window.state = () => {
+  return store.getState();
+};
 
 export default store;

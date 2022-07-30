@@ -1,183 +1,6 @@
 let initialState = {
-  dialogs: [
-    {
-      id: 1,
-      type: "group",
-      name: "Пройти инструктаж по безопасности",
-      image: "https://picsum.photos/100/100?random=1",
-      description: "Отдел охраны труда",
-      messages: [
-        {
-          id: 1,
-          profile: {
-            id: 2534,
-            name: "Карина Привезенцева",
-            image: "https://picsum.photos/100/100?random=2534",
-          },
-          messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
-          timeSending: "11:01"
-        },
-        {
-          id: 2,
-          profile: {
-            id: 5466,
-            name: "Марсель Немировский",
-            image: "https://picsum.photos/100/100?random=7",
-          },
-          messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
-          timeSending: "12:17"
-        },
-        {
-          id: 3,
-          profile: {
-            id: 1,
-            name: "Чуваков Алексей",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
-          timeSending: "12:18"
-        },
-        {
-          id: 4,
-          profile: {
-            id: 246234,
-            name: "Роман Гордеев",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "☝ Уточнил: медные 60 шт.",
-          timeSending: "13:03"
-        },
-        {
-          id: 4,
-          profile: {
-            id: 1,
-            name: "Чуваков Алексей",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "Спасибо, сейчас заполню 😌",
-          timeSending: "13:07"
-        }
-      ],
-    },
-    {
-      id: 2,
-      type: "group",
-      name: "Реализация товаров и услуг",
-      image: "https://picsum.photos/100/100?random=2",
-      description: "Отдел продаж",
-      messages: [
-        {
-          id: 1,
-          profile: {
-            id: 2534,
-            name: "Карина Привезенцева",
-            image: "https://picsum.photos/100/100?random=2534",
-          },
-          messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
-          timeSending: "11:01"
-        },
-        {
-          id: 2,
-          profile: {
-            id: 5466,
-            name: "Марсель Немировский",
-            image: "https://picsum.photos/100/100?random=7",
-          },
-          messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
-          timeSending: "12:17"
-        },
-        {
-          id: 3,
-          profile: {
-            id: 1,
-            name: "Чуваков Алексей",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
-          timeSending: "12:18"
-        },
-        {
-          id: 4,
-          profile: {
-            id: 246234,
-            name: "Роман Гордеев",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "☝ Уточнил: медные 60 шт.",
-          timeSending: "13:03"
-        },
-        {
-          id: 4,
-          profile: {
-            id: 1,
-            name: "Чуваков Алексей",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "Спасибо, сейчас заполню 😌",
-          timeSending: "13:07"
-        }
-      ],
-    },
-    {
-      id: 3,
-      type: "group",
-      name: "Провести обучение новых сотрудни...",
-      image: "https://picsum.photos/100/100?random=3",
-      description: "Отдел продаж",
-      messages: [
-        {
-          id: 1,
-          profile: {
-            id: 2534,
-            name: "Карина Привезенцева",
-            image: "https://picsum.photos/100/100?random=2534",
-          },
-          messageText: "Привет! Заполняю сейчас документ по «Ромашке». Какие им нужны гвозди и сколько штук? Уточни, пожалуйста.",
-          timeSending: "11:01"
-        },
-        {
-          id: 2,
-          profile: {
-            id: 5466,
-            name: "Марсель Немировский",
-            image: "https://picsum.photos/100/100?random=7",
-          },
-          messageText: "Валерия, твои пироги просто бомба! 😋 Обалдеть! Просто невероятно вкусно!",
-          timeSending: "12:17"
-        },
-        {
-          id: 3,
-          profile: {
-            id: 1,
-            name: "Чуваков Алексей",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "Спасибо большое, Марсель, я очень старалась 😊 Коллеги, приглашаю вас тоже попробовать пирог. Не стесняйтесь 🙏",
-          timeSending: "12:18"
-        },
-        {
-          id: 4,
-          profile: {
-            id: 246234,
-            name: "Роман Гордеев",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "☝ Уточнил: медные 60 шт.",
-          timeSending: "13:03"
-        },
-        {
-          id: 4,
-          profile: {
-            id: 1,
-            name: "Чуваков Алексей",
-            image: "https://picsum.photos/100/100?random=8",
-          },
-          messageText: "Спасибо, сейчас заполню 😌",
-          timeSending: "13:07"
-        }
-      ],
-    }
-  ],
+  dialogs: [],
+  profiles: [],
   activeType: "group",
   currentDialogID: 1,
   textNewMessage: "",
@@ -187,6 +10,9 @@ let initialState = {
 let UPDATE_TEXT_NEW_MESSAGE = "UPDATE_TEXT_NEW_MESSAGE";
 let ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
 let SET_ACTIVE_DIALOG = "SET_ACTIVE_DIALOG";
+let SET_DIALOGS = "SET_DIALOGS";
+let SET_MESSAGES = "SET_MESSAGES";
+let SET_PROFILES = "SET_PROFILES";
 
 let ChatReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -212,12 +38,7 @@ let ChatReducer = (state = initialState, action) => {
                     image: "https://picsum.photos/100/100?random=2534",
                   },
                   messageText: state.textNewMessage,
-                  timeSending: ((DateNow) => {
-                      let h = (DateNow.getHours() > 10 ? DateNow.getHours() : "0" + DateNow.getHours());
-                      let m = (DateNow.getMinutes() > 10 ? DateNow.getMinutes() : "0" + DateNow.getMinutes());
-                      return h + ":" + m;
-                    }
-                  )(new Date())
+                  timeSending: formatterTime(new Date())
                 }
               ]
             }
@@ -230,6 +51,29 @@ let ChatReducer = (state = initialState, action) => {
       return {
         ...state,
         currentDialogID: action.dialogID
+      };
+    case SET_DIALOGS:
+      return {
+        ...state,
+        dialogs: action.dialogs
+      };
+    case SET_MESSAGES:
+      return {
+        ...state,
+        dialogs: state.dialogs.map(dialog => {
+          if (dialog.id === action.chat_id) {
+            return {
+              ...dialog,
+              messages: action.messages
+            }
+          }
+          return dialog;
+        })
+      };
+    case SET_PROFILES:
+      return {
+        ...state,
+        profiles: action.profiles
       };
     default:
       return state;
@@ -254,6 +98,35 @@ export let setActiveDialogAC = (dialogID) => {
     type: SET_ACTIVE_DIALOG,
     dialogID: dialogID
   }
+};
+
+export let setDialogsAC = (dialogs) => {
+  return {
+    type: SET_DIALOGS,
+    dialogs: dialogs
+  }
+};
+
+export let setMessagesAC = (chat_id, messages) => {
+  return {
+    type: SET_MESSAGES,
+    chat_id: chat_id,
+    messages: messages
+  }
+};
+
+export let setProfilesAC = (profiles) => {
+  return {
+    type: SET_PROFILES,
+    profiles: profiles
+  }
+};
+
+
+export let formatterTime = (DateTime) => {
+  let h = (DateTime.getHours() > 10 ? DateTime.getHours() : "0" + DateTime.getHours());
+  let m = (DateTime.getMinutes() > 10 ? DateTime.getMinutes() : "0" + DateTime.getMinutes());
+  return h + ":" + m;
 };
 
 export default ChatReducer;
