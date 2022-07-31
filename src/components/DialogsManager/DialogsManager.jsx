@@ -1,5 +1,6 @@
 import React from "react";
 import Style from "./DialogsManager.module.css"
+import {NavLink} from "react-router-dom";
 
 let DialogsManager = props => {
   return (
@@ -15,7 +16,7 @@ let DialogsManager = props => {
         {props.dialogs.map(dialog => {
           if (dialog.type === props.activeType) {
             return (
-              <div className={Style.dialog + " " + (dialog.id === props.currentDialogID ? Style.active : "")}
+              <NavLink to={`/chat/${dialog.id}`} className={Style.dialog + " " + (dialog.id === props.currentDialogID ? Style.active : "")}
                    onClick={() => {
                      props.setActiveDialog(dialog.id);
                    }}
@@ -29,7 +30,7 @@ let DialogsManager = props => {
                   <div className={Style.date}>25 Фев</div>
                   <div className={Style.countNewMessage}>3</div>
                 </div>*/}
-              </div>
+              </NavLink>
             )
           }
         })}

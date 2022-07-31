@@ -7,17 +7,6 @@ import axios from "axios";
 class DialogsManagerContainer extends React.Component {
 
   componentDidMount() {
-    axios.get("http://127.0.0.1:8000/api/v1/user")
-      .then(response => {
-        this.props.setProfiles(response.data.items.map(profile => {
-          return {
-            id: profile.id,
-            name: `${profile.first_name}  ${profile.last_name}`,
-            image: profile.avatar_url
-          };
-        }))
-      });
-
     axios.get("http://127.0.0.1:8000/api/v1/chat")
       .then(response => {
         this.props.setDialogs(response.data.items.map(dialog => {
@@ -43,6 +32,17 @@ class DialogsManagerContainer extends React.Component {
                 owner_id: message.owner_id,
               }
             }));
+
+            axios.get("http://127.0.0.1:8000/api/v1/user")
+              .then(response => {
+                this.props.setProfiles(response.data.items.map(profile => {
+                  return {
+                    id: profile.id,
+                    name: `${profile.first_name}  ${profile.last_name}`,
+                    image: profile.avatar_url
+                  };
+                }))
+              });
           });
       });
   }

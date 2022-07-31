@@ -1,4 +1,5 @@
 import axios from "axios";
+import {useDispatch} from "react-redux";
 
 let initialState = {
   dialogs: [],
@@ -90,6 +91,32 @@ export let addNewMessage = () => {
   }
 };
 export let setActiveDialog = (dialog_id) => {
+
+  axios.get(`http://127.0.0.1:8000/api/v1/message/${dialog_id}`)
+    .then(response => {
+      let users_id = [];
+      useDispatch(setMessages(dialog_id, response.data.items.map(message => {
+        users_id.push(message.owner_id);
+        return {
+          id: message.id,
+          messageText: message.message,
+          timeSending: formatterTime(new Date(message.timestamp_sent)),
+          owner_id: message.owner_id,
+        }
+      })));
+
+      axios.get("http://127.0.0.1:8000/api/v1/user")
+        .then(response => {
+          setProfiles(response.data.items.map(profile => {
+            return {
+              id: profile.id,
+              name: `${profile.first_name}  ${profile.last_name}`,
+              image: profile.avatar_url
+            };
+          }))
+        });
+    });
+
   return {
     type: SET_ACTIVE_DIALOG,
     dialog_id

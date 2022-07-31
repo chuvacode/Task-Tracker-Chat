@@ -2,7 +2,13 @@ import React from "react";
 import {connect} from "react-redux";
 import DialogWindow from "./DialogWindow";
 
+import {withRouter} from "react-router-dom";
+
 class DialogWindowContainer extends React.Component {
+
+  componentDidMount() {
+  }
+
   render() {
     return <DialogWindow
       dialog={this.props.dialog}
@@ -24,4 +30,4 @@ let mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(DialogWindowContainer);
+export default connect(mapStateToProps)(withRouter(DialogWindowContainer));
