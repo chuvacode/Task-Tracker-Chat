@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import DialogsManager from "./DialogsManager";
-import {formatterTime, setActiveDialogAC, setDialogsAC, setMessagesAC, setProfilesAC} from "../../redux/chat-reducer";
+import {formatterTime, setActiveDialog, setDialogs, setMessages, setProfiles} from "../../redux/chat-reducer";
 import React from "react";
 import axios from "axios";
 
@@ -31,6 +31,19 @@ class DialogsManagerContainer extends React.Component {
           }
         }));
 
+        axios.get(`http://127.0.0.1:8000/api/v1/message/${this.props.currentDialogID}`)
+          .then(response => {
+            let users_id = [];
+            this.props.setMessages(this.props.currentDialogID, response.data.items.map(message => {
+              users_id.push(message.owner_id);
+              return {
+                id: message.id,
+                messageText: message.message,
+                timeSending: formatterTime(new Date(message.timestamp_sent)),
+                owner_id: message.owner_id,
+              }
+            }));
+          });
       });
   }
 
@@ -52,20 +65,7 @@ let mapStateToProps = state => {
   };
 };
 
-let mapDispatchToProps = dispatch => {
-  return {
-    setActiveDialog(dialogID) {
-      dispatch(setActiveDialogAC(dialogID));
-    },
-    setDialogs(dialogs) {
-      dispatch(setDialogsAC(dialogs));
-    },
-
-    setProfiles(profiles) {
-      dispatch(setProfilesAC(profiles))
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DialogsManagerContainer);
+export default connect(mapStateToProps, {
+  setActiveDialog, setDialogs, setMessages, setProfiles
+})(DialogsManagerContainer);
 

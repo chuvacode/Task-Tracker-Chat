@@ -1,3 +1,5 @@
+import axios from "axios";
+
 let initialState = {
   dialogs: [],
   profiles: [],
@@ -32,11 +34,7 @@ let ChatReducer = (state = initialState, action) => {
                 ...dialog.messages,
                 {
                   id: dialog.messages.length + 1,
-                  profile: {
-                    id: 1,
-                    name: "Чуваков Алексей",
-                    image: "https://picsum.photos/100/100?random=2534",
-                  },
+                  owner_id: 1,
                   messageText: state.textNewMessage,
                   timeSending: formatterTime(new Date())
                 }
@@ -50,7 +48,7 @@ let ChatReducer = (state = initialState, action) => {
     case SET_ACTIVE_DIALOG:
       return {
         ...state,
-        currentDialogID: action.dialogID
+        currentDialogID: action.dialog_id
       };
     case SET_DIALOGS:
       return {
@@ -80,52 +78,45 @@ let ChatReducer = (state = initialState, action) => {
   }
 };
 
-export let updateTextNewMessageAC = (text) => {
+export let updateTextNewMessage = (text) => {
   return {
     type: UPDATE_TEXT_NEW_MESSAGE,
     text: text
   }
 };
-
-export let addNewMessageAC = () => {
+export let addNewMessage = () => {
   return {
     type: ADD_NEW_MESSAGE
   }
 };
-
-export let setActiveDialogAC = (dialogID) => {
+export let setActiveDialog = (dialog_id) => {
   return {
     type: SET_ACTIVE_DIALOG,
-    dialogID: dialogID
+    dialog_id
   }
 };
-
-export let setDialogsAC = (dialogs) => {
+export let setDialogs = (dialogs) => {
   return {
     type: SET_DIALOGS,
     dialogs: dialogs
   }
 };
-
-export let setMessagesAC = (chat_id, messages) => {
+export let setMessages = (chat_id, messages) => {
   return {
     type: SET_MESSAGES,
     chat_id: chat_id,
     messages: messages
   }
 };
-
-export let setProfilesAC = (profiles) => {
+export let setProfiles = (profiles) => {
   return {
     type: SET_PROFILES,
     profiles: profiles
   }
 };
-
-
-export let formatterTime = (DateTime) => {
-  let h = (DateTime.getHours() > 10 ? DateTime.getHours() : "0" + DateTime.getHours());
-  let m = (DateTime.getMinutes() > 10 ? DateTime.getMinutes() : "0" + DateTime.getMinutes());
+export let formatterTime = (date_time) => {
+  let h = (date_time.getHours() > 10 ? date_time.getHours() : "0" + date_time.getHours());
+  let m = (date_time.getMinutes() > 10 ? date_time.getMinutes() : "0" + date_time.getMinutes());
   return h + ":" + m;
 };
 

@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import ChatInput from "./ChatInput";
-import {addNewMessageAC, updateTextNewMessageAC} from "../../../redux/chat-reducer";
+import {addNewMessage, updateTextNewMessage} from "../../../redux/chat-reducer";
 
 let mapStateToProps = state => {
   return {
@@ -8,18 +8,9 @@ let mapStateToProps = state => {
   };
 };
 
-let mapDispatchToProps = dispatch => {
-  return {
-    updateTextNewMessage(text) {
-      dispatch(updateTextNewMessageAC(text));
-    },
-    addNewMessage() {
-      dispatch(addNewMessageAC())
-    }
-  };
-};
-
-const ChatInputContainer = connect(mapStateToProps, mapDispatchToProps)(ChatInput);
+const ChatInputContainer = connect(mapStateToProps, {
+  updateTextNewMessage, addNewMessage
+})(ChatInput);
 
 export default ChatInputContainer;
 

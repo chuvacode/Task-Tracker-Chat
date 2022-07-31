@@ -29,6 +29,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    padding-bottom: 30px;
 }
 .messenger::-webkit-scrollbar {
     display: none;
