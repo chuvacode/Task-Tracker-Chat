@@ -11,6 +11,7 @@
     flex-direction: column;
     border-bottom: 1px solid #D1D4E1;
     padding: 20px 0;
+    min-height: 80px;
 }
 
 .dialogWindowHeader__title {
@@ -29,8 +30,20 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    padding-bottom: 30px;
+    padding: 30px 0;
 }
 .messenger::-webkit-scrollbar {
     display: none;
+}
+
+.empty {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    color: #4e4e4e;
+}
+
+.loader {
+    max-width: 100px;
+    margin: 0 auto;
 }

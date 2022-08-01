@@ -5,16 +5,8 @@ import DialogWindow from "./DialogWindow";
 import {withRouter} from "react-router-dom";
 
 class DialogWindowContainer extends React.Component {
-
-  componentDidMount() {
-  }
-
   render() {
-    return <DialogWindow
-      dialog={this.props.dialog}
-      profileId={this.props.profileId}
-      profiles = {this.props.profiles}
-    />
+    return <DialogWindow {...this.props} />
   }
 }
 
@@ -26,7 +18,8 @@ let mapStateToProps = state => {
       }
     }))[0],
     profiles: state.chat.profiles,
-    profileId: state.profile.profileId
+    profileId: state.profile.profileId,
+    isLoadingChatIds: state.chat.isLoadingChatIds
   }
 };
 

@@ -14,11 +14,11 @@ let DialogsManager = props => {
       </div>
       <div className={Style.dialogs}>
         {props.dialogs.map(dialog => {
-          if (dialog.type === props.activeType) {
+          if (dialog.type === props.activeTab) {
             return (
               <NavLink to={`/chat/${dialog.id}`} className={Style.dialog + " " + (dialog.id === props.currentDialogID ? Style.active : "")}
                    onClick={() => {
-                     props.setActiveDialog(dialog.id);
+                     props.activeDialog(dialog.id);
                    }}
                    key={dialog.id}>
                 <img className={Style.dialog__image} src={dialog.image}/>

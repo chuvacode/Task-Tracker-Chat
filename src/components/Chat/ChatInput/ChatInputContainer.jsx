@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import ChatInput from "./ChatInput";
-import {addNewMessage, updateTextNewMessage} from "../../../redux/chat-reducer";
+import {sendMessage, updateTextNewMessage} from "../../../redux/chat-reducer";
 
 let mapStateToProps = state => {
   return {
@@ -9,7 +9,7 @@ let mapStateToProps = state => {
 };
 
 const ChatInputContainer = connect(mapStateToProps, {
-  updateTextNewMessage, addNewMessage
+  updateTextNewMessage, sendMessage
 })(ChatInput);
 
 export default ChatInputContainer;
