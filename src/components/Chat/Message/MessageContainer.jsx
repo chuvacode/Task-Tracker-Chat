@@ -1,20 +1,15 @@
+import React from "react";
 import {connect} from "react-redux";
 import Message from "./Message";
+import {deleteMessages} from "../../../redux/chat-reducer";
 
-let mapStateToProps = state => {
-  return {
-    profileImage: "",
-    timeSending: "",
-    messageText: ""
-  };
-};
+class MessageContainer extends React.Component {
+  render() {
+    return <Message {...this.props} />
+  }
+}
 
-let mapDispatchToProps = dispatch => {
-  return {
-  };
-};
-
-const MessageContainer = connect(mapStateToProps, mapDispatchToProps)(Message);
-
-export default MessageContainer;
+export default connect(null, {
+  deleteMessages
+})(MessageContainer);
 

@@ -34,7 +34,7 @@ let ChatReducer = (state = initialState, action) => {
               messages: [
                 ...dialog.messages,
                 {
-                  id: dialog.messages[dialog.messages.length - 1].id + 1,
+                  id: action.message_id,
                   owner_id: 1,
                   messageText: action.message,
                   timeSending: formatterTime(new Date())
@@ -89,10 +89,11 @@ let ChatReducer = (state = initialState, action) => {
 };
 
 // Action Creators
-export let addNewMessage = message => {
+export let addNewMessage = (message_id, message) => {
   return {
     type: ADD_NEW_MESSAGE,
-    message
+    message,
+    message_id
   }
 };
 export let setDialogs = dialogs => {
@@ -197,8 +198,55 @@ export const activeDialog = chat_id => (dispatch, state) => {
 export const sendMessage = message => (dispatch, state) => {
   state = state().chat;
   if (!message || message.trim() === "") return;
-  api.Chat.sendMessage(state.currentDialogID, message, Date.now());
-  dispatch(addNewMessage(message));
+  api.Chat.sendMessage(state.currentDialogID, message, Date.now())
+    .then(message => {
+      dispatch(addNewMessage(message.id, message.message));
+    });
+};
+export const deleteMessages = message_ids => (dispatch, state) => {
+  state = state().chat;
+  api.Chat.deleteMessages(message_ids).then(status => {
+    dispatch(setStatusLoadingChat(state.currentDialogID, true));
+    dispatch(setActiveDialog(state.currentDialogID));
+    api.Chat.getMessages(state.currentDialogID)
+      .then(messages => {
+        // Set Messages
+        dispatch(setMessages(state.currentDialogID, messages.items.map(message => {
+          return {
+            id: message.id,
+            messageText: message.message,
+            timeSending: formatterTime(new Date(message.timestamp_sent)),
+            owner_id: message.owner_id,
+          };
+        })));
+
+        // Chat User IDs
+        let user_ids = messages.items.reduce((result, message) => {
+          return result.includes(message.owner_id) ? result : [...result, message.owner_id];
+        }, []);
+
+        // Missing User IDs
+        user_ids = user_ids.filter(id => !(state.profiles.some(profile => profile.id === id)));
+
+        if (user_ids.length === 0) {
+          return dispatch(setStatusLoadingChat(state.currentDialogID, false));
+        }
+
+        // Get Profiles
+        api.User.getProfiles(user_ids)
+          .then(profiles => {
+            dispatch(addProfiles(profiles.items.map(profile => {
+              return {
+                id: profile.id,
+                name: `${profile.first_name}  ${profile.last_name}`,
+                image: profile.avatar_url
+              };
+            })));
+            dispatch(setStatusLoadingChat(state.currentDialogID, false));
+          });
+      });
+  });
+
 };
 
 export default ChatReducer;

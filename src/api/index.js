@@ -37,6 +37,10 @@ export const Chat = {
     return api.get(`message/${chat_id}`)
       .then(response => response.data);
   },
+  deleteMessages: message_ids => {
+    return api.delete(`message/${message_ids}`)
+      .then(response => response.data);
+  },
   sendMessage: (chat_id, message, timestamp) => {
     return api.post(`message`, {
       chat_id,

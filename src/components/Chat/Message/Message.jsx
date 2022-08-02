@@ -1,10 +1,12 @@
 import React from "react";
 import Style from "./Message.module.css"
+import * as api from "../../../api";
+import {deleteMessages} from "../../../redux/chat-reducer";
 
 let Message = props => {
   if (props.ownerId === props.myId) {
     return (
-      <div className={Style.myMessage}>
+      <div className={Style.myMessage} onClick={() => {props.deleteMessages(props.messageId)}}>
         <div className={Style.messageContent}>
           <div className={Style.messageText}>{props.messageText}</div>
         </div>

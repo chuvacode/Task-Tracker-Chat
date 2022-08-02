@@ -1,8 +1,8 @@
 import Style from "./DialogWindow.module.css";
-import Message from "../Chat/Message/Message";
 import ChatInputContainer from "../Chat/ChatInput/ChatInputContainer";
 import React, {createRef} from "react";
 import loader from "../../assets/loader.svg";
+import MessageContainer from "../Chat/Message/MessageContainer";
 
 let refDialog = createRef();
 
@@ -33,18 +33,18 @@ class DialogWindow extends React.Component {
                   }
                 }))[0];
 
-                return <Message key={message.id}
-                                profileImage={profile.image}
-                                profileName={profile.name}
-                                timeSending={message.timeSending}
-                                messageText={message.messageText}
-                                ownerId={profile.id}
-                                myId={this.props.profileId}
-                />
+                return <MessageContainer key={message.id}
+                                         messageId={message.id}
+                                         profileImage={profile.image}
+                                         profileName={profile.name}
+                                         timeSending={message.timeSending}
+                                         messageText={message.messageText}
+                                         ownerId={profile.id}
+                                         myId={this.props.profileId} />
               })
             }
 
-            { !this.isDone() && <img src={loader} className={Style.loader} alt="loader" /> }
+            {!this.isDone() && <img src={loader} className={Style.loader} alt="loader"/>}
 
             {
               this.isDone() && this.props.dialog.messages.length === 0 &&

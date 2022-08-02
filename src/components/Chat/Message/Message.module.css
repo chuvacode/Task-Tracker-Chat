@@ -43,6 +43,7 @@
 
 
 .myMessage {
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-self: flex-end;
