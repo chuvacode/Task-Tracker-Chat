@@ -1,23 +1,36 @@
-import React from "react";
+import React, {Fragment} from "react";
 import './App.css';
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import {Route} from "react-router-dom";
 import ChatContainer from "./components/Chat/ChatContainer";
+import LoginContainer from "./components/Login/LoginContainer";
+import AuthRedirect from "./components/AuthRedirect/AuthRedirect";
 
-function App() {
-
-  return (
-    <div className="App">
-      <SidebarContainer/>
-      <div className="content">
+class App extends React.Component {
+  render() {
+    return (
+      <div className="App">
+        <Route path="/login" render={
+          () => {
+            return <LoginContainer/>
+          }
+        }/>
         <Route path="/chat/:id?" render={
           () => {
-            return <ChatContainer/>
+            return (
+              <Fragment>
+                <SidebarContainer/>
+                <div className="content">
+                  <ChatContainer/>
+                </div>
+              </Fragment>
+            )
           }
         }/>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default App;
+// export default App;
+export default AuthRedirect(App);

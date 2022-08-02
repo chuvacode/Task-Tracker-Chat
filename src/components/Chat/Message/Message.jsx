@@ -1,7 +1,5 @@
 import React from "react";
 import Style from "./Message.module.css"
-import * as api from "../../../api";
-import {deleteMessages} from "../../../redux/chat-reducer";
 
 let Message = props => {
   if (props.ownerId === props.myId) {

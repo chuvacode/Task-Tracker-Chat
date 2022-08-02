@@ -1,7 +1,6 @@
 import React from "react";
 import Style from "./Sidebar.module.css"
 import NavSidebarContainer from "./NavSidebar/NavSidebarContainer";
-import * as api from "../../api";
 
 let Sidebar = props => {
   return (
@@ -11,14 +10,7 @@ let Sidebar = props => {
       </div>
       <div className={Style.profileName}>{props.profileName}</div>
 
-      <div className={Style.profileName} onClick={() => {
-        api.Auth.getCookie().then(r => {
-          api.Auth.login('chyika', 'password');
-        });
-      }}>Войти</div>
-      <div className={Style.profileName} onClick={() => {
-        api.Auth.logout()
-      }}>Выйти</div>
+      <div className={Style.logout} onClick={props.logout}>Выйти</div>
 
       <NavSidebarContainer/>
     </div>

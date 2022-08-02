@@ -1,19 +1,15 @@
 import {connect} from "react-redux";
 import Sidebar from "./Sidebar";
+import {logout} from "../../redux/profile-reducer";
 
-let mapStateToProps = state => {
-  return {
-    profileName: state.profile.profileName,
-    profileImage: state.profile.profileImage,
-  };
-};
+let mapStateToProps = state => ({
+  profileName: state.profile.profileName,
+  profileImage: state.profile.profileImage,
+});
 
-let mapDispatchToProps = dispatch => {
-  return {
-  };
-};
-
-const SidebarContainer = connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+const SidebarContainer = connect(mapStateToProps, {
+  logout
+})(Sidebar);
 
 export default SidebarContainer;
 

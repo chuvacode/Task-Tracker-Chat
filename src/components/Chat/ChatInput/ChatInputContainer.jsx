@@ -11,12 +11,12 @@ class ChatInputContainer extends React.Component {
   };
 
   render() {
-    return <WrappedReduxFormChatInput onSubmit={this.handleSubmit}/>
+    return <WithReduxFormChatInput onSubmit={this.handleSubmit}/>
   }
 
 }
 
-let WrappedReduxFormChatInput = reduxForm({form: 'chat-input'})(ChatInput);
+let WithReduxFormChatInput = reduxForm({form: 'chat-input'})(ChatInput);
 export default connect(null, {
   sendMessage
 })(ChatInputContainer);
