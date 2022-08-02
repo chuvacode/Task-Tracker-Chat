@@ -1,16 +1,24 @@
+import React from "react";
 import {connect} from "react-redux";
 import ChatInput from "./ChatInput";
-import {sendMessage, updateTextNewMessage} from "../../../redux/chat-reducer";
+import {sendMessage} from "../../../redux/chat-reducer";
+import {reduxForm} from "redux-form";
 
-let mapStateToProps = state => {
-  return {
-    textNewMessage: state.chat.textNewMessage
+class ChatInputContainer extends React.Component {
+
+  handleSubmit = formData => {
+    this.props.sendMessage(formData.message)
   };
-};
 
-const ChatInputContainer = connect(mapStateToProps, {
-  updateTextNewMessage, sendMessage
-})(ChatInput);
+  render() {
+    return <WrappedReduxFormChatInput onSubmit={this.handleSubmit}/>
+  }
 
-export default ChatInputContainer;
+}
+
+let WrappedReduxFormChatInput = reduxForm({form: 'chat-input'})(ChatInput);
+export default connect(null, {
+  sendMessage
+})(ChatInputContainer);
+
 

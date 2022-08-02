@@ -1,5 +1,3 @@
-import axios from 'axios';
-import {useDispatch} from 'react-redux';
 import * as api from '../api'
 
 let initialState = {
@@ -7,7 +5,6 @@ let initialState = {
   profiles: [],
   activeTab: "group",
   currentDialogID: null,
-  textNewMessage: "",
   countNewMessages: 1,
   isLoadingChatIds: []
 };
@@ -37,17 +34,16 @@ let ChatReducer = (state = initialState, action) => {
               messages: [
                 ...dialog.messages,
                 {
-                  id: dialog.messages.length + 1,
+                  id: dialog.messages[dialog.messages.length - 1].id + 1,
                   owner_id: 1,
-                  messageText: state.textNewMessage,
+                  messageText: action.message,
                   timeSending: formatterTime(new Date())
                 }
               ]
             }
           }
           return dialog;
-        }),
-        textNewMessage: ""
+        })
       };
     case SET_ACTIVE_DIALOG:
       return {
@@ -93,18 +89,13 @@ let ChatReducer = (state = initialState, action) => {
 };
 
 // Action Creators
-export let updateTextNewMessage = (text) => {
+export let addNewMessage = message => {
   return {
-    type: UPDATE_TEXT_NEW_MESSAGE,
-    text: text
+    type: ADD_NEW_MESSAGE,
+    message
   }
 };
-export let addNewMessage = () => {
-  return {
-    type: ADD_NEW_MESSAGE
-  }
-};
-export let setDialogs = (dialogs) => {
+export let setDialogs = dialogs => {
   return {
     type: SET_DIALOGS,
     dialogs: dialogs
@@ -117,13 +108,13 @@ export let setMessages = (chat_id, messages) => {
     messages: messages
   }
 };
-export let addProfiles = (profiles) => {
+export let addProfiles = profiles => {
   return {
     type: ADD_PROFILES,
     profiles: profiles
   }
 };
-export let setActiveDialog = (dialog_id) => {
+export let setActiveDialog = dialog_id => {
   return {
     type: SET_ACTIVE_DIALOG,
     dialog_id
@@ -145,73 +136,69 @@ export let formatterTime = (date_time) => {
 };
 
 // Thunks
-export const getChats = () => {
-  return dispatch => {
-    api.Chat.getChats()
-      .then(chats => {
-        dispatch(setDialogs(chats.items.map(dialog => {
-          return {
-            id: dialog.id,
-            type: dialog.type,
-            name: dialog.meta.name,
-            description: dialog.meta.description,
-            image: dialog.meta.image_url,
-            messages: []
-          }
-        })));
-      });
-  };
-};
-export const activeDialog = chat_id => {
-  return (dispatch, state) => {
-    dispatch(setStatusLoadingChat(chat_id, true));
-    dispatch(setActiveDialog(chat_id));
-    api.Chat.getMessages(chat_id)
-      .then(messages => {
-        // Set Messages
-        dispatch(setMessages(chat_id, messages.items.map(message => {
-          return {
-            id: message.id,
-            messageText: message.message,
-            timeSending: formatterTime(new Date(message.timestamp_sent)),
-            owner_id: message.owner_id,
-          };
-        })));
-
-        // Chat User IDs
-        let user_ids = messages.items.reduce((result, message) => {
-          return result.includes(message.owner_id) ? result : [...result, message.owner_id];
-        }, []);
-
-        // Missing User IDs
-        user_ids = user_ids.filter(id => !(state().chat.profiles.some(profile => profile.id === id)));
-
-        if (user_ids.length === 0) {
-          return dispatch(setStatusLoadingChat(chat_id, false));
+export const getChats = () => dispatch => {
+  api.Chat.getChats()
+    .then(chats => {
+      dispatch(setDialogs(chats.items.map(dialog => {
+        return {
+          id: dialog.id,
+          type: dialog.type,
+          name: dialog.meta.name,
+          description: dialog.meta.description,
+          image: dialog.meta.image_url,
+          messages: []
         }
-
-        // Get Profiles
-        api.User.getProfiles(user_ids)
-          .then(profiles => {
-            dispatch(addProfiles(profiles.items.map(profile => {
-              return {
-                id: profile.id,
-                name: `${profile.first_name}  ${profile.last_name}`,
-                image: profile.avatar_url
-              };
-            })));
-            dispatch(setStatusLoadingChat(chat_id, false));
-          });
-      });
-  };
+      })));
+    });
 };
-export const sendMessage = () => {
-  return (dispatch, state) => {
-    state = state().chat;
-    if (state.textNewMessage.trim() === "") return;
-    api.Chat.sendMessage(state.currentDialogID, state.textNewMessage, Date.now());
-    dispatch(addNewMessage());
-  }
+export const activeDialog = chat_id => (dispatch, state) => {
+  // try activate current chat
+  if (state().chat.currentDialogID === chat_id) return;
+  dispatch(setStatusLoadingChat(chat_id, true));
+  dispatch(setActiveDialog(chat_id));
+  api.Chat.getMessages(chat_id)
+    .then(messages => {
+      // Set Messages
+      dispatch(setMessages(chat_id, messages.items.map(message => {
+        return {
+          id: message.id,
+          messageText: message.message,
+          timeSending: formatterTime(new Date(message.timestamp_sent)),
+          owner_id: message.owner_id,
+        };
+      })));
+
+      // Chat User IDs
+      let user_ids = messages.items.reduce((result, message) => {
+        return result.includes(message.owner_id) ? result : [...result, message.owner_id];
+      }, []);
+
+      // Missing User IDs
+      user_ids = user_ids.filter(id => !(state().chat.profiles.some(profile => profile.id === id)));
+
+      if (user_ids.length === 0) {
+        return dispatch(setStatusLoadingChat(chat_id, false));
+      }
+
+      // Get Profiles
+      api.User.getProfiles(user_ids)
+        .then(profiles => {
+          dispatch(addProfiles(profiles.items.map(profile => {
+            return {
+              id: profile.id,
+              name: `${profile.first_name}  ${profile.last_name}`,
+              image: profile.avatar_url
+            };
+          })));
+          dispatch(setStatusLoadingChat(chat_id, false));
+        });
+    });
+};
+export const sendMessage = message => (dispatch, state) => {
+  state = state().chat;
+  if (!message || message.trim() === "") return;
+  api.Chat.sendMessage(state.currentDialogID, message, Date.now());
+  dispatch(addNewMessage(message));
 };
 
 export default ChatReducer;

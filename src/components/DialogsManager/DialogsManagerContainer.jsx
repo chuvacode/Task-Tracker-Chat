@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import DialogsManager from "./DialogsManager";
-import {activeDialog, getChats, setMessages, setProfiles} from "../../redux/chat-reducer";
+import {activeDialog, getChats} from "../../redux/chat-reducer";
 import React from "react";
 
 class DialogsManagerContainer extends React.Component {
@@ -10,7 +10,7 @@ class DialogsManagerContainer extends React.Component {
   }
 
   render() {
-    return <DialogsManager {...this.props}/>;
+    return <DialogsManager {...this.props} />;
   }
 }
 

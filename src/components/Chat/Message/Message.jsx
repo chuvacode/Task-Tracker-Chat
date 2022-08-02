@@ -17,7 +17,7 @@ let Message = props => {
     return (
       <div className={Style.message}>
         <div className={Style.messageInfo}>
-          <img className={Style.profileImage} src={props.profileImage}/>
+          <img className={Style.profileImage} src={props.profileImage} alt={''}/>
           <div className={Style.messageTime}>{props.timeSending}</div>
         </div>
         <div className={Style.messageContent}>
@@ -27,7 +27,6 @@ let Message = props => {
       </div>
     );
   }
-
 };
 
 export default Message;

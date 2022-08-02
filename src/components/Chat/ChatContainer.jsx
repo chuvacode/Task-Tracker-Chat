@@ -1,7 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
 import Chat from "./Chat";
-import {setProfile} from "../../redux/profile-reducer";
 
 class ChatContainer extends React.Component {
   render() {

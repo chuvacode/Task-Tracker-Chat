@@ -5,6 +5,7 @@ import {Route} from "react-router-dom";
 import ChatContainer from "./components/Chat/ChatContainer";
 
 function App() {
+
   return (
     <div className="App">
       <SidebarContainer/>

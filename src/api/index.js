@@ -1,6 +1,4 @@
 import axios from "axios";
-import {useDispatch} from "react-redux";
-import {formatterTime, setMessages, setProfiles} from "../redux/chat-reducer";
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api/v1/',
@@ -8,35 +6,36 @@ const api = axios.create({
 });
 
 export const Auth = {
+  login: (username, password) => {
+    return api.post('login', {
+      username,
+      password
+    }).then(response => response.data);
+  },
+  logout: (username, password) => {
+    return api.post('logout').then(response => response.data);
+  },
   getCookie: () => {
     return api.get('csrf-cookie');
   },
   getMe: () => {
     return api.get('get-me')
-      .then(response => {
-        return response.data;
-      });
+      .then(response => response.data);
   }
 };
 
 export const Chat = {
   getChats: () => {
     return api.get('chat')
-      .then(response => {
-        return response.data;
-      });
+      .then(response => response.data);
   },
   getChat: chat_id => {
     return api.get(`chat/${chat_id}`)
-      .then(response => {
-        return response.data;
-      });
+      .then(response => response.data);
   },
   getMessages: chat_id => {
     return api.get(`message/${chat_id}`)
-      .then(response => {
-        return response.data;
-      });
+      .then(response => response.data);
   },
   sendMessage: (chat_id, message, timestamp) => {
     return api.post(`message`, {
@@ -44,9 +43,7 @@ export const Chat = {
       message,
       timestamp
     })
-      .then(response => {
-        return response.data;
-      });
+      .then(response => response.data);
   }
 };
 

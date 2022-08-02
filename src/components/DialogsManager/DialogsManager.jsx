@@ -21,7 +21,7 @@ let DialogsManager = props => {
                      props.activeDialog(dialog.id);
                    }}
                    key={dialog.id}>
-                <img className={Style.dialog__image} src={dialog.image}/>
+                <img className={Style.dialog__image} src={dialog.image} alt={''}/>
                 <div className={Style.dialog__info}>
                   <div className={Style.dialog__title}>{dialog.name}</div>
                   <div className={Style.dialog__subtitle}>{dialog.description}</div>
