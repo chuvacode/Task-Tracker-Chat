@@ -20,14 +20,20 @@ export const Auth = {
   },
   getMe: () => {
     return api.get('get-me')
-      .then(response => response.data);
+      .then(response => response.data)
+      .catch(reason => {
+        throw reason.response;
+      });
   }
 };
 
 export const Chat = {
   getChats: () => {
     return api.get('chat')
-      .then(response => response.data);
+      .then(response => response.data)
+      .catch(reason => {
+        throw reason.response;
+      });
   },
   getChat: chat_id => {
     return api.get(`chat/${chat_id}`)

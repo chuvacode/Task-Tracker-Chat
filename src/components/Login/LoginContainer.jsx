@@ -2,7 +2,7 @@ import Login from "./Login";
 import React from "react";
 import {reduxForm} from "redux-form";
 import {connect} from "react-redux";
-import {login} from "../../redux/profile-reducer";
+import {login} from "../../redux/auth-reducer";
 
 class LoginContainer extends React.Component {
 

@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Chat from "./Chat";
 
 class ChatContainer extends React.Component {
+
   render() {
     return <Chat/>
   }

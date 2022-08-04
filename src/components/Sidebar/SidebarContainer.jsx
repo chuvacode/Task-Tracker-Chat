@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import Sidebar from "./Sidebar";
-import {logout} from "../../redux/profile-reducer";
+import {logout} from "../../redux/auth-reducer";
 
 let mapStateToProps = state => ({
   profileName: state.profile.profileName,

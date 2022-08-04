@@ -10,6 +10,7 @@ class DialogsManagerContainer extends React.Component {
   }
 
   render() {
+    console.log('DD');
     return <DialogsManager {...this.props} />;
   }
 }

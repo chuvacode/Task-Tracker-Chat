@@ -1,4 +1,5 @@
 import * as api from '../api'
+import {removeProfile} from "./auth-reducer";
 
 let initialState = {
   dialogs: [],
@@ -9,84 +10,12 @@ let initialState = {
   isLoadingChatIds: []
 };
 
-let UPDATE_TEXT_NEW_MESSAGE = 'UPDATE_TEXT_NEW_MESSAGE';
 let ADD_NEW_MESSAGE = 'ADD_NEW_MESSAGE';
-let SET_ACTIVE_DIALOG = 'SET_ACTIVE_DIALOG';
 let SET_DIALOGS = 'SET_DIALOGS';
 let SET_MESSAGES = 'SET_MESSAGES';
 let ADD_PROFILES = 'ADD_PROFILES';
+let SET_ACTIVE_DIALOG = 'SET_ACTIVE_DIALOG';
 let SET_STATUS_LOADING_CHAT = 'SET_STATUS_LOADING_CHAT';
-
-let ChatReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case UPDATE_TEXT_NEW_MESSAGE:
-      return {
-        ...state,
-        textNewMessage: action.text
-      };
-    case ADD_NEW_MESSAGE:
-      return {
-        ...state,
-        dialogs: state.dialogs.map(dialog => {
-          if (state.currentDialogID === dialog.id) {
-            return {
-              ...dialog,
-              messages: [
-                ...dialog.messages,
-                {
-                  id: action.message_id,
-                  owner_id: 1,
-                  messageText: action.message,
-                  timeSending: formatterTime(new Date())
-                }
-              ]
-            }
-          }
-          return dialog;
-        })
-      };
-    case SET_ACTIVE_DIALOG:
-      return {
-        ...state,
-        currentDialogID: action.dialog_id
-      };
-    case SET_DIALOGS:
-      return {
-        ...state,
-        dialogs: action.dialogs
-      };
-    case SET_MESSAGES:
-      return {
-        ...state,
-        dialogs: state.dialogs.map(dialog => {
-          if (dialog.id === action.chat_id) {
-            return {
-              ...dialog,
-              messages: action.messages
-            }
-          }
-          return dialog;
-        })
-      };
-    case ADD_PROFILES:
-      return {
-        ...state,
-        profiles: [
-          ...state.profiles,
-          ...action.profiles
-        ]
-      };
-    case SET_STATUS_LOADING_CHAT:
-      return {
-        ...state,
-        isLoadingChatIds: action.status
-          ? [...state.isLoadingChatIds, action.chat_id]
-          : state.isLoadingChatIds.filter(id => id !== action.chat_id)
-      };
-    default:
-      return state;
-  }
-};
 
 // Action Creators
 export let addNewMessage = (message_id, message) => {
@@ -150,6 +79,11 @@ export const getChats = () => dispatch => {
           messages: []
         }
       })));
+    })
+    .catch(response => {
+      if (response.status === 401) {
+        dispatch(removeProfile());
+      }
     });
 };
 export const activeDialog = chat_id => (dispatch, state) => {
@@ -249,4 +183,69 @@ export const deleteMessages = message_ids => (dispatch, state) => {
 
 };
 
-export default ChatReducer;
+// Reducer
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_NEW_MESSAGE:
+      return {
+        ...state,
+        dialogs: state.dialogs.map(dialog => {
+          if (state.currentDialogID === dialog.id) {
+            return {
+              ...dialog,
+              messages: [
+                ...dialog.messages,
+                {
+                  id: action.message_id,
+                  owner_id: 1,
+                  messageText: action.message,
+                  timeSending: formatterTime(new Date())
+                }
+              ]
+            }
+          }
+          return dialog;
+        })
+      };
+    case SET_ACTIVE_DIALOG:
+      return {
+        ...state,
+        currentDialogID: action.dialog_id
+      };
+    case SET_DIALOGS:
+      return {
+        ...state,
+        dialogs: action.dialogs
+      };
+    case SET_MESSAGES:
+      return {
+        ...state,
+        dialogs: state.dialogs.map(dialog => {
+          if (dialog.id === action.chat_id) {
+            return {
+              ...dialog,
+              messages: action.messages
+            }
+          }
+          return dialog;
+        })
+      };
+    case ADD_PROFILES:
+      return {
+        ...state,
+        profiles: [
+          ...state.profiles,
+          ...action.profiles
+        ]
+      };
+    case SET_STATUS_LOADING_CHAT:
+      return {
+        ...state,
+        isLoadingChatIds: action.status
+          ? [...state.isLoadingChatIds, action.chat_id]
+          : state.isLoadingChatIds.filter(id => id !== action.chat_id)
+      };
+    default:
+      return state;
+  }
+};

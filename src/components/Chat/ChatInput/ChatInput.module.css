@@ -18,6 +18,7 @@
     font-size: 15px;
     line-height: 14px;
     letter-spacing: 0.02em;
+    background: transparent!important;
 }
 
 .formNewMessage input::-webkit-input-placeholder {
