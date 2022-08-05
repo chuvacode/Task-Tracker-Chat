@@ -18,6 +18,7 @@ let ADD_PROFILES = 'ADD_PROFILES';
 let SET_ACTIVE_DIALOG = 'SET_ACTIVE_DIALOG';
 let SET_STATUS_LOADING_CHAT = 'SET_STATUS_LOADING_CHAT';
 let TOGGLE_SELECT_MESSAGE = 'TOGGLE_SELECT_MESSAGE';
+let ALL_UNSELECT = 'ALL_UNSELECT';
 
 // Action Creators
 export const addNewMessage = (message_id, message) => {
@@ -65,6 +66,11 @@ export const toggleSelectMessage = message_id => {
     message_id
   }
 };
+export const allUnselect = () => {
+  return {
+    type: ALL_UNSELECT
+  }
+};
 
 // Helpers
 export const formatterTime = (date_time) => {
@@ -97,6 +103,7 @@ export const getChats = () => dispatch => {
 export const activeDialog = chat_id => (dispatch, state) => {
   // try activate current chat
   if (state().chat.currentDialogID === chat_id) return;
+  dispatch(allUnselect());
   dispatch(setStatusLoadingChat(chat_id, true));
   dispatch(setActiveDialog(chat_id));
   api.Chat.getMessages(chat_id)
@@ -145,9 +152,12 @@ export const sendMessage = message => (dispatch, state) => {
       dispatch(addNewMessage(message.id, message.message));
     });
 };
-export const deleteMessages = message_ids => (dispatch, state) => {
+export const deleteMessages = () => (dispatch, state) => {
   state = state().chat;
+  const message_ids = state.selectedMessageIds;
+
   api.Chat.deleteMessages(message_ids).then(status => {
+    dispatch(allUnselect());
     dispatch(setStatusLoadingChat(state.currentDialogID, true));
     dispatch(setActiveDialog(state.currentDialogID));
     api.Chat.getMessages(state.currentDialogID)
@@ -259,6 +269,11 @@ export default (state = initialState, action) => {
         selectedMessageIds: !state.selectedMessageIds.some(id => action.message_id === id) ?
           [...state.selectedMessageIds, action.message_id] :
           state.selectedMessageIds.filter(id => action.message_id !== id)
+      };
+    case ALL_UNSELECT:
+      return {
+        ...state,
+        selectedMessageIds: []
       };
     default:
       return state;

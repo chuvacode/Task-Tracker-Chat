@@ -1,16 +1,17 @@
-import React, {createRef} from "react";
+import React, {createRef, useEffect} from "react";
 import Style from "./ChatWindow.module.css";
-import ChatHeader from "./ChatHeader/ChatHeader";
 import ChatInputContainer from "../Chat/ChatInput/ChatInputContainer";
 import Loader from "../common/Loader/Loader";
 import MessageContainer from "../Chat/Message/MessageContainer";
+import ChatHeaderContainer from "./ChatHeader/ChatHeaderContainer";
 
 const ChatWindow = props => {
   const refDialog = createRef();
 
-  // useEffect(() => {
-  //   refDialog.current.scrollTop = refDialog.current.scrollHeight - refDialog.current.offsetHeight;
-  // }, [props.dialog]);
+  useEffect(() => {
+    if (refDialog.current)
+      refDialog.current.scrollTop = refDialog.current.scrollHeight - refDialog.current.offsetHeight;
+  }, [props.dialog, props.profiles]);
 
   const isDone = () => {
     return !props.isLoadingChatIds.some(chat_id => chat_id === props.dialog.id);
@@ -19,7 +20,7 @@ const ChatWindow = props => {
   return (
     <div className={Style.chatWindow}>
       {props.dialog && <>
-        <ChatHeader name={props.dialog.name} description={props.dialog.description}/>
+        <ChatHeaderContainer/>
         <div className={Style.messenger} ref={refDialog}>
 
           {isDone() && props.dialog.messages.map(message => {
@@ -44,9 +45,8 @@ const ChatWindow = props => {
           {isDone() && props.dialog.messages.length === 0 && (
             <div className={Style.empty}>Нет сообщений</div>
           )}
-
-          <ChatInputContainer/>
         </div>
+        <ChatInputContainer/>
       </>}
 
       {!props.dialog && <>

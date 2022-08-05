@@ -1,8 +1,10 @@
 import React from "react";
 import {connect} from "react-redux";
-import ChatHeader from "./ChatWindow";
+import ChatHeader from "./ChatHeader";
 
 import {withRouter} from "react-router-dom";
+import {compose} from "redux";
+import {allUnselect, deleteMessages} from "../../../redux/chat-reducer";
 
 class ChatHeaderContainer extends React.Component {
   render() {
@@ -11,16 +13,20 @@ class ChatHeaderContainer extends React.Component {
 }
 
 let mapStateToProps = state => {
+  const dialog = (state.chat.dialogs.filter(dialog => {
+    if (dialog.id === state.chat.currentDialogID) {
+      return dialog;
+    }
+  }))[0];
+
   return {
-    dialog: (state.chat.dialogs.filter(dialog => {
-      if (dialog.id === state.chat.currentDialogID) {
-        return dialog;
-      }
-    }))[0],
-    profiles: state.chat.profiles,
-    profileId: state.profile.profileId,
-    isLoadingChatIds: state.chat.isLoadingChatIds
-  }
+    name: dialog.name,
+    description: dialog.description,
+    selectedMessageIds: state.chat.selectedMessageIds
+  };
 };
 
-export default connect(mapStateToProps)(withRouter(ChatHeaderContainer));
+export default compose(
+  connect(mapStateToProps, {allUnselect, deleteMessages}),
+  withRouter)
+(ChatHeaderContainer);
