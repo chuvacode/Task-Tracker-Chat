@@ -1,14 +1,14 @@
-.chatManager {
+.chatsManager {
     display: flex;
     flex-direction: column;
     max-width: 400px;
 }
 
-.chatManagerHeader {
+.chatsManagerHeader {
     display: flex;
 }
 
-.chatManagerHeader__item {
+.chatsManagerHeader__item {
     font-weight: 600;
     font-size: 27px;
     line-height: 150%;
@@ -16,12 +16,12 @@
     margin-right: 32px;
 }
 
-.chatManagerHeader__item.active {
+.chatsManagerHeader__item.active {
     color: rgba(0, 0, 0, 0.8);
     position: relative;
 }
 
-.chatManagerHeader__item.active:before {
+.chatsManagerHeader__item.active:before {
     content: "";
     position: absolute;
     width: 5px;

@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import Message from "./Message";
-import {deleteMessages} from "../../../redux/chat-reducer";
+import {deleteMessages, toggleSelectMessage } from "../../../redux/chat-reducer";
 
 class MessageContainer extends React.Component {
   render() {
@@ -9,7 +9,12 @@ class MessageContainer extends React.Component {
   }
 }
 
-export default connect(null, {
-  deleteMessages
+const mapStateToProps = state => ({
+  selectedMessageIds: state.chat.selectedMessageIds
+});
+
+export default connect(mapStateToProps, {
+  deleteMessages,
+  toggleSelectMessage
 })(MessageContainer);
 

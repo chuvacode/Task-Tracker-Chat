@@ -7,7 +7,8 @@ let initialState = {
   activeTab: "group",
   currentDialogID: null,
   countNewMessages: 1,
-  isLoadingChatIds: []
+  isLoadingChatIds: [],
+  selectedMessageIds: []
 };
 
 let ADD_NEW_MESSAGE = 'ADD_NEW_MESSAGE';
@@ -16,50 +17,57 @@ let SET_MESSAGES = 'SET_MESSAGES';
 let ADD_PROFILES = 'ADD_PROFILES';
 let SET_ACTIVE_DIALOG = 'SET_ACTIVE_DIALOG';
 let SET_STATUS_LOADING_CHAT = 'SET_STATUS_LOADING_CHAT';
+let TOGGLE_SELECT_MESSAGE = 'TOGGLE_SELECT_MESSAGE';
 
 // Action Creators
-export let addNewMessage = (message_id, message) => {
+export const addNewMessage = (message_id, message) => {
   return {
     type: ADD_NEW_MESSAGE,
     message,
     message_id
   }
 };
-export let setDialogs = dialogs => {
+export const setDialogs = dialogs => {
   return {
     type: SET_DIALOGS,
     dialogs: dialogs
   }
 };
-export let setMessages = (chat_id, messages) => {
+export const setMessages = (chat_id, messages) => {
   return {
     type: SET_MESSAGES,
     chat_id: chat_id,
     messages: messages
   }
 };
-export let addProfiles = profiles => {
+export const addProfiles = profiles => {
   return {
     type: ADD_PROFILES,
     profiles: profiles
   }
 };
-export let setActiveDialog = dialog_id => {
+export const setActiveDialog = dialog_id => {
   return {
     type: SET_ACTIVE_DIALOG,
     dialog_id
   }
 };
-export let setStatusLoadingChat = (chat_id, status) => {
+export const setStatusLoadingChat = (chat_id, status) => {
   return {
     type: SET_STATUS_LOADING_CHAT,
     status,
     chat_id
   }
 };
+export const toggleSelectMessage = message_id => {
+  return {
+    type: TOGGLE_SELECT_MESSAGE,
+    message_id
+  }
+};
 
 // Helpers
-export let formatterTime = (date_time) => {
+export const formatterTime = (date_time) => {
   let h = (date_time.getHours() > 10 ? date_time.getHours() : "0" + date_time.getHours());
   let m = (date_time.getMinutes() > 10 ? date_time.getMinutes() : "0" + date_time.getMinutes());
   return h + ":" + m;
@@ -244,6 +252,13 @@ export default (state = initialState, action) => {
         isLoadingChatIds: action.status
           ? [...state.isLoadingChatIds, action.chat_id]
           : state.isLoadingChatIds.filter(id => id !== action.chat_id)
+      };
+    case TOGGLE_SELECT_MESSAGE:
+      return {
+        ...state,
+        selectedMessageIds: !state.selectedMessageIds.some(id => action.message_id === id) ?
+          [...state.selectedMessageIds, action.message_id] :
+          state.selectedMessageIds.filter(id => action.message_id !== id)
       };
     default:
       return state;

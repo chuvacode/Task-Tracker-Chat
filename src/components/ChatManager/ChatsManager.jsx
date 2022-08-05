@@ -1,13 +1,18 @@
-import React from "react";
-import Style from "./DialogsManager.module.css"
+import React, {useEffect} from "react";
+import Style from "./ChatsManager.module.css"
 import {NavLink} from "react-router-dom";
 
-let DialogsManager = props => {
+let ChatsManager = props => {
+
+  useEffect(() => {
+    props.getChats();
+  }, []);
+
   return (
-    <div className={Style.chatManager}>
-      <div className={Style.chatManagerHeader}>
-        <div className={`${Style.chatManagerHeader__item} ${Style.active}`}>Обсуждения</div>
-        <div className={`${Style.chatManagerHeader__item}`}>Контакты</div>
+    <div className={Style.chatsManager}>
+      <div className={Style.chatsManagerHeader}>
+        <div className={`${Style.chatsManagerHeader__item} ${Style.active}`}>Обсуждения</div>
+        <div className={`${Style.chatsManagerHeader__item}`}>Контакты</div>
       </div>
       <div className={Style.search}>
         <input type="text" placeholder="Поиск"/>
@@ -39,4 +44,4 @@ let DialogsManager = props => {
   );
 };
 
-export default DialogsManager;
+export default ChatsManager;

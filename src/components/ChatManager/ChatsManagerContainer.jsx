@@ -1,19 +1,9 @@
 import {connect} from "react-redux";
-import DialogsManager from "./DialogsManager";
+import ChatsManager from "./ChatsManager";
 import {activeDialog, getChats} from "../../redux/chat-reducer";
 import React from "react";
 
-class DialogsManagerContainer extends React.Component {
-
-  componentDidMount() {
-    this.props.getChats();
-  }
-
-  render() {
-    console.log('DD');
-    return <DialogsManager {...this.props} />;
-  }
-}
+const ChatsManagerContainer = props => <ChatsManager {...props} />;
 
 let mapStateToProps = state => {
   return {
@@ -27,5 +17,5 @@ let mapStateToProps = state => {
 export default connect(mapStateToProps, {
   activeDialog,
   getChats
-})(DialogsManagerContainer);
+})(ChatsManagerContainer);
 

@@ -1,6 +1,6 @@
-.message {
+.message, .myMessage {
+    cursor: pointer;
     display: flex;
-    margin-top: 30px;
 }
 
 .messageInfo {
@@ -21,6 +21,7 @@
     height: 40px;
 
 }
+
 .profileName {
     font-weight: 600;
     font-size: 13px;
@@ -43,11 +44,8 @@
 
 
 .myMessage {
-    cursor: pointer;
-    display: flex;
     flex-direction: column;
-    align-self: flex-end;
-    margin-top: 30px;
+    margin-left: auto;
 }
 
 .myMessage .messageContent {
@@ -62,4 +60,30 @@
     display: flex;
     margin: 10px 0 0 0;
     justify-content: flex-end;
+}
+
+.selected {
+    position: relative;
+    /*background: #F0F2F5;*/
+
+}
+
+.selected .message, .selected .myMessage {
+    opacity: .7;
+}
+
+/*.selected:after {*/
+/*    position: absolute;*/
+/*    content: '';*/
+/*    !*inset: 0;*!*/
+/*    right: 0px;*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='currentColor' fill-rule='evenodd' d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zM6 7.94a.75.75 0 1 0-1 1.12l1.46 1.3c.44.38 1.1.33 1.49-.1l.04-.05 2.9-3.75a.75.75 0 1 0-1.19-.92L7.1 8.91 6 7.94z'%3E%3C/path%3E%3C/svg%3E");*/
+/*    background-size: cover;*/
+/*}*/
+
+.messageContainer {
+    display: flex;
+    margin-bottom: 20px;
 }

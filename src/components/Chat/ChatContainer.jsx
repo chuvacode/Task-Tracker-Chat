@@ -2,12 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import Chat from "./Chat";
 
-class ChatContainer extends React.Component {
-
-  render() {
-    return <Chat/>
-  }
-}
+const ChatContainer = () => <Chat/>;
 
 let mapStateToProps = state => {
   return {

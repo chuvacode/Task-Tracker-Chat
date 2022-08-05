@@ -1,20 +1,21 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {Redirect, withRouter} from "react-router-dom";
-import {getAuthStatus, getInitializeStatus} from "../../redux/auth-selectors";
-import {getMeProfile} from "../../redux/auth-reducer";
+import {getAuthStatus, getInitializeStatus} from "../redux/auth-selectors";
+import {getMeProfile} from "../redux/auth-reducer";
+import {compose} from "redux";
 
 const mapStateToProps = state => ({
   isAuth: getAuthStatus(state),
   isInitialized: getInitializeStatus(state)
 });
 
-let AuthController = (Component) => {
+const withAuthController = Component => {
   const RedirectComponent = props => {
 
     useEffect(() => {
       props.getMeProfile();
-    });
+    }, []);
 
     if (props.isInitialized) {
 
@@ -29,9 +30,10 @@ let AuthController = (Component) => {
       return <Component {...props}/>;
     }
   };
-  return connect(mapStateToProps, {
-    getMeProfile
-  })(withRouter(RedirectComponent));
+  return compose(
+    connect(mapStateToProps, {getMeProfile}),
+    withRouter)
+  (RedirectComponent);
 };
 
-export default AuthController;
+export default withAuthController;

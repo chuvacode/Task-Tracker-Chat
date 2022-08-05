@@ -1,0 +1,19 @@
+.chatWindowHeader {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #D1D4E1;
+    padding: 20px 0;
+    min-height: 80px;
+}
+
+.chatWindowHeader__title {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.8);
+}
+.chatWindowHeader__subtitle {
+    margin-top: 3px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #959CA8;
+}

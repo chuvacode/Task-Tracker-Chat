@@ -1,12 +1,12 @@
 import React from "react";
 import {connect} from "react-redux";
-import DialogWindow from "./DialogWindow";
+import ChatWindow from "./ChatWindow";
 
 import {withRouter} from "react-router-dom";
 
-class DialogWindowContainer extends React.Component {
+class ChatWindowContainer extends React.Component {
   render() {
-    return <DialogWindow {...this.props} />
+    return <ChatWindow {...this.props} />
   }
 }
 
@@ -23,4 +23,4 @@ let mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(withRouter(DialogWindowContainer));
+export default connect(mapStateToProps)(withRouter(ChatWindowContainer));
