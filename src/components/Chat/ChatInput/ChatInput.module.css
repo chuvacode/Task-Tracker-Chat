@@ -49,34 +49,3 @@
     width: 20px;
     height: 20px;
 }
-
-
-.textareaContainer {
-    position: relative;
-    width: 100%;
-}
-
-.textarea {
-    cursor: text;
-    position: relative;
-    outline: none!important;
-    background: transparent;
-}
-
-/*.textarea:before {*/
-/*    content: attr(placeholder);*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: 100%;*/
-/*    height: 20px;*/
-/*    opacity: .5;*/
-/*}*/
-
-.placeholder {
-    pointer-events: none;
-    position: absolute;
-    opacity: .5;
-    top: 0;
-    left: 0;
-}
