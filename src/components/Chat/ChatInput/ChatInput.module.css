@@ -2,6 +2,7 @@
 
 .formNewMessage {
     display: flex;
+    align-items: center;
     background: #FFFFFF;
     border-radius: 7px;
     margin-top: auto;
@@ -9,7 +10,7 @@
     box-shadow: 0px 2.26326px 4.52652px rgba(237, 237, 245, 0.5);
 }
 
-.formNewMessage input {
+.formNewMessage textarea {
     width: 100%;
     margin-right: 20px;
     outline: none!important;
@@ -19,9 +20,15 @@
     line-height: 14px;
     letter-spacing: 0.02em;
     background: transparent!important;
+    resize: none;
 }
 
-.formNewMessage input::-webkit-input-placeholder {
+
+.dd {
+    width: 100%;
+    min-height: 20px;
+}
+.formNewMessage textarea::-webkit-input-placeholder {
     color: rgba(0, 0, 0, 0.2);
 }
 
@@ -35,9 +42,41 @@
     background: #317EF6;
     border-radius: 50%;
     border: none;
+    margin-top: auto;
 }
 
 .formNewMessage button svg {
     width: 20px;
     height: 20px;
+}
+
+
+.textareaContainer {
+    position: relative;
+    width: 100%;
+}
+
+.textarea {
+    cursor: text;
+    position: relative;
+    outline: none!important;
+    background: transparent;
+}
+
+/*.textarea:before {*/
+/*    content: attr(placeholder);*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 20px;*/
+/*    opacity: .5;*/
+/*}*/
+
+.placeholder {
+    pointer-events: none;
+    position: absolute;
+    opacity: .5;
+    top: 0;
+    left: 0;
 }

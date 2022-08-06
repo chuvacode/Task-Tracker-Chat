@@ -1,18 +1,13 @@
 import React from "react";
 import {connect} from "react-redux";
 import ChatHeader from "./ChatHeader";
-
 import {withRouter} from "react-router-dom";
 import {compose} from "redux";
 import {allUnselect, deleteMessages} from "../../../redux/chat-reducer";
 
-class ChatHeaderContainer extends React.Component {
-  render() {
-    return <ChatHeader {...this.props} />
-  }
-}
+const ChatHeaderContainer = props => <ChatHeader {...props} />;
 
-let mapStateToProps = state => {
+const mapStateToProps = state => {
   const dialog = (state.chat.dialogs.filter(dialog => {
     if (dialog.id === state.chat.currentDialogID) {
       return dialog;
