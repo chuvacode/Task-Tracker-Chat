@@ -1,7 +1,7 @@
-import React from "react";
-import Style from "./name.module.css"
+import React from 'react';
+import Style from './name.module.css';
 
-let name = props => {
+const name = props => {
   return (
     <div></div>
   );

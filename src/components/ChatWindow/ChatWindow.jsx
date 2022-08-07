@@ -1,9 +1,9 @@
-import React, {createRef, useEffect} from "react";
-import Style from "./ChatWindow.module.css";
-import ChatInputContainer from "../Chat/ChatInput/ChatInputContainer";
-import Loader from "../common/Loader/Loader";
-import MessageContainer from "../Chat/Message/MessageContainer";
-import ChatHeaderContainer from "./ChatHeader/ChatHeaderContainer";
+import React, {createRef, useEffect} from 'react';
+import Style from './ChatWindow.module.css';
+import ChatInputContainer from '../Chat/ChatInput/ChatInputContainer';
+import Loader from '../common/Loader/Loader';
+import MessageContainer from '../Chat/Message/MessageContainer';
+import ChatHeaderContainer from './ChatHeader/ChatHeaderContainer';
 
 const ChatWindow = props => {
   const refDialog = createRef();
@@ -24,7 +24,7 @@ const ChatWindow = props => {
         <div className={Style.messenger} ref={refDialog}>
 
           {isDone() && props.dialog.messages.map(message => {
-            let profile = (props.profiles.filter(profile => {
+            const profile = (props.profiles.filter(profile => {
               if (profile.id === message.owner_id) {
                 return profile;
               }
@@ -37,7 +37,7 @@ const ChatWindow = props => {
                                      timeSending={message.timeSending}
                                      messageText={message.messageText}
                                      ownerId={profile.id}
-                                     myId={props.profileId}/>
+                                     myId={props.profileId}/>;
           })}
 
           {!isDone() && <Loader/>}

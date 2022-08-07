@@ -1,9 +1,9 @@
-import React, {createRef, useEffect} from "react";
-import Style from "./ChatInput.module.css"
-import {Field} from "redux-form";
-import {TextAreaContainer} from "../../common/FormControls";
+import React, {createRef, useEffect} from 'react';
+import Style from './ChatInput.module.css';
+import {Field} from 'redux-form';
+import {TextAreaContainer} from '../../common/FormControls';
 
-let ChatInput = props => {
+const ChatInput = props => {
     return (
     <form onSubmit={data => {
       props.handleSubmit(data);

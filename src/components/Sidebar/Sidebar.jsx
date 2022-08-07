@@ -1,8 +1,8 @@
-import React from "react";
-import Style from "./Sidebar.module.css"
-import NavSidebarContainer from "./NavSidebar/NavSidebarContainer";
+import React from 'react';
+import Style from './Sidebar.module.css';
+import NavSidebarContainer from './NavSidebar/NavSidebarContainer';
 
-let Sidebar = props => {
+const Sidebar = props => {
   return (
     <div className={Style.sidebar}>
       <div className={Style.profileImageContainer}>

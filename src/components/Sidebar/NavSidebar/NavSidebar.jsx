@@ -1,13 +1,13 @@
-import React from "react";
-import Style from "./NavSidebar.module.css"
-import {NavLink} from "react-router-dom";
+import React from 'react';
+import Style from './NavSidebar.module.css';
+import {NavLink} from 'react-router-dom';
 
-let NavSidebar = props => {
+const NavSidebar = props => {
   return (
     <div className={Style.nav}>
       <NavLink className={Style.link + ' ' + Style.linkActive} to="/chat">
         Сообщения
-        {props.countNewMessages > 0 ? <span className={Style.counter}>{props.countNewMessages}</span> : ""}
+        {props.countNewMessages > 0 ? <span className={Style.counter}>{props.countNewMessages}</span> : ''}
       </NavLink>
       <NavLink className={Style.link} to="/task-line">
         Лента задач

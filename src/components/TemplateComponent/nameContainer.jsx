@@ -1,12 +1,12 @@
-import {connect} from "react-redux";
-import name from "./name";
+import {connect} from 'react-redux';
+import name from './name';
 
-let mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
   };
 };
 
-let mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
   return {
   };
 };

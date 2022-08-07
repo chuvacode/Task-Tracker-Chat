@@ -1,15 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api/v1/',
-  withCredentials: true
+  withCredentials: true,
 });
 
 export const Auth = {
   login: (username, password) => {
     return api.post('login', {
       username,
-      password
+      password,
     }).then(response => response.data);
   },
   logout: (username, password) => {
@@ -24,7 +24,7 @@ export const Auth = {
       .catch(reason => {
         throw reason.response;
       });
-  }
+  },
 };
 
 export const Chat = {
@@ -48,13 +48,13 @@ export const Chat = {
       .then(response => response.data);
   },
   sendMessage: (chat_id, message, timestamp) => {
-    return api.post(`message`, {
+    return api.post('message', {
       chat_id,
       message,
-      timestamp
+      timestamp,
     })
       .then(response => response.data);
-  }
+  },
 };
 
 export const User = {
@@ -63,5 +63,5 @@ export const User = {
       .then(response => {
         return response.data;
       });
-  }
+  },
 };

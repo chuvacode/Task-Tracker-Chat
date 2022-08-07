@@ -1,13 +1,13 @@
-import {connect} from "react-redux";
-import NavSidebar from "./NavSidebar";
+import {connect} from 'react-redux';
+import NavSidebar from './NavSidebar';
 
-let mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    countNewMessages: state.chat.countNewMessages
+    countNewMessages: state.chat.countNewMessages,
   };
 };
 
-let mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
   return {
   };
 };

@@ -1,9 +1,10 @@
-import React from "react";
-import {connect} from "react-redux";
-import ChatHeader from "./ChatHeader";
-import {withRouter} from "react-router-dom";
-import {compose} from "redux";
-import {allUnselect, deleteMessages} from "../../../redux/chat-reducer";
+import React from 'react';
+import {connect} from 'react-redux';
+import ChatHeader from './ChatHeader';
+import {withRouter} from 'react-router-dom';
+import {compose} from 'redux';
+import {deleteMessages} from '../../../state/chat/operations';
+import {allUnselect} from '../../../state/chat/actions';
 
 const ChatHeaderContainer = props => <ChatHeader {...props} />;
 
@@ -17,7 +18,7 @@ const mapStateToProps = state => {
   return {
     name: dialog.name,
     description: dialog.description,
-    selectedMessageIds: state.chat.selectedMessageIds
+    selectedMessageIds: state.chat.selectedMessageIds,
   };
 };
 

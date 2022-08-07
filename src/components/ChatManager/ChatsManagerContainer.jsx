@@ -1,21 +1,21 @@
-import {connect} from "react-redux";
-import ChatsManager from "./ChatsManager";
-import {activeDialog, getChats} from "../../redux/chat-reducer";
-import React from "react";
+import {connect} from 'react-redux';
+import ChatsManager from './ChatsManager';
+import React from 'react';
+import {activeDialog, getChats} from '../../state/chat/operations';
 
 const ChatsManagerContainer = props => <ChatsManager {...props} />;
 
-let mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
     dialogs: state.chat.dialogs,
     activeTab: state.chat.activeTab,
     currentDialogID: state.chat.currentDialogID,
-    isLoadingProfiles: state.chat.isLoadingProfiles
+    isLoadingProfiles: state.chat.isLoadingProfiles,
   };
 };
 
 export default connect(mapStateToProps, {
   activeDialog,
-  getChats
+  getChats,
 })(ChatsManagerContainer);
 

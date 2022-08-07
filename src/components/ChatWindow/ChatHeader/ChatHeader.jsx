@@ -1,7 +1,6 @@
-import Style from "./ChatHeader.module.css";
-import React from "react";
-import {declination} from "../../../utils/declination";
-
+import Style from './ChatHeader.module.css';
+import React from 'react';
+import {declination} from '../../../utils';
 
 const ChatHeader = ({name, description, selectedMessageIds, allUnselect, deleteMessages}) => {
   const isEmptySelectList = selectedMessageIds.length === 0;

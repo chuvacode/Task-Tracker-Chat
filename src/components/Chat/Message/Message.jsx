@@ -1,10 +1,10 @@
-import React from "react";
-import Style from "./Message.module.css"
+import React from 'react';
+import Style from './Message.module.css';
 
-let Message = ({
+const Message = ({
                  ownerId, myId, messageId,
                  messageText, profileImage, profileName,
-                 timeSending, toggleSelectMessage, selectedMessageIds
+                 timeSending, toggleSelectMessage, selectedMessageIds,
                }) => {
 
   const isOwn = ownerId === myId;
@@ -13,7 +13,7 @@ let Message = ({
   return (
     <div className={`${Style.messageContainer} ${isSelected ? Style.selected : ''}`}>
       <div className={`${isOwn ? Style.myMessage : Style.message}`} onClick={() => {
-        toggleSelectMessage(messageId)
+        toggleSelectMessage(messageId);
       }}>
         {!isOwn && (
           <div className={Style.messageInfo}>
@@ -32,7 +32,7 @@ let Message = ({
         )}
       </div>
     </div>
-  )
+  );
 };
 
 export default Message;

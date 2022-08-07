@@ -128,13 +128,6 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="Дельфинарий (project level)">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="Люди добрые">
         <serverdata>
           <mappings>
@@ -192,6 +185,13 @@
         </serverdata>
       </paths>
       <paths name="Целебный родник">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="екатерининский-жк.рф">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

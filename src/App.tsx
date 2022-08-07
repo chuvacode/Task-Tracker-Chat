@@ -1,21 +1,21 @@
-import React, {Fragment} from "react";
+import React, {Fragment} from 'react';
 import './App.css';
-import {getAuthStatus} from "./redux/auth-selectors";
-import {compose} from "redux";
-import LoginContainer from "./components/Login/LoginContainer";
-import {BrowserRouter, Route} from "react-router-dom";
-import SidebarContainer from "./components/Sidebar/SidebarContainer";
-import ChatContainer from "./components/Chat/ChatContainer";
-import withAuthController from "./hoc/withAuthController";
-import {connect, Provider} from "react-redux";
-import store from "./redux/store";
+import {getAuthStatus} from './state/auth/selectors';
+import {compose} from 'redux';
+import LoginContainer from './components/Login/LoginContainer';
+import {BrowserRouter, Route} from 'react-router-dom';
+import SidebarContainer from './components/Sidebar/SidebarContainer';
+import ChatContainer from './components/Chat/ChatContainer';
+import withAuthController from './hoc/withAuthController';
+import {connect, Provider} from 'react-redux';
+import reduxStore from './state/store';
 
-const App = props => {
-  const _APP = props => (
+const App = () => {
+  const RootHTML = (props: any) => (
     <div className="App">
       <Route path="/login" render={
         () => {
-          return <LoginContainer/>
+          return <LoginContainer/>;
         }
       }/>
       <Route path="/chat/:id?" render={
@@ -27,7 +27,7 @@ const App = props => {
                 <ChatContainer/>
               </div>
             </Fragment>
-          )
+          );
         }
       }/>
       <Route exact={!props.isAuth} path="/" render={
@@ -38,7 +38,7 @@ const App = props => {
               <div className="content">
               </div>
             </Fragment>
-          )
+          );
         }
       }/>
     </div>
@@ -47,20 +47,19 @@ const App = props => {
   const AppContainer = compose(
     withAuthController,
     connect(mapStateToProps))
-  (_APP);
+  (RootHTML);
 
-  return <AppContainer/>
+  return <AppContainer/>;
 };
 
-const mapStateToProps = state => ({
-  isAuth: getAuthStatus(state)
+const mapStateToProps = (state: any) => ({
+  isAuth: getAuthStatus(state),
 });
 
 export default () => (
-  <Provider store={store}>
+  <Provider store={reduxStore}>
     <BrowserRouter>
       <App/>
     </BrowserRouter>
   </Provider>
 );
-

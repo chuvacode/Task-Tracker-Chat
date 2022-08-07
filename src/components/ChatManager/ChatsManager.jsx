@@ -1,8 +1,8 @@
-import React, {useEffect} from "react";
-import Style from "./ChatsManager.module.css"
-import {NavLink} from "react-router-dom";
+import React, {useEffect} from 'react';
+import Style from './ChatsManager.module.css';
+import {NavLink} from 'react-router-dom';
 
-let ChatsManager = props => {
+const ChatsManager = props => {
 
   useEffect(() => {
     props.getChats();
@@ -21,7 +21,7 @@ let ChatsManager = props => {
         {props.dialogs.map(dialog => {
           if (dialog.type === props.activeTab) {
             return (
-              <NavLink to={`/chat/${dialog.id}`} className={Style.dialog + " " + (dialog.id === props.currentDialogID ? Style.active : "")}
+              <NavLink to={`/chat/${dialog.id}`} className={Style.dialog + ' ' + (dialog.id === props.currentDialogID ? Style.active : '')}
                    onClick={() => {
                      props.activeDialog(dialog.id);
                    }}
@@ -36,7 +36,7 @@ let ChatsManager = props => {
                   <div className={Style.countNewMessage}>3</div>
                 </div>*/}
               </NavLink>
-            )
+            );
           }
         })}
       </div>

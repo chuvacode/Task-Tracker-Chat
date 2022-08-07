@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest"
+  ],
+  "rules": {
+    "quotes": ["error", "single"],
+    "prefer-const": "error",
+    "jsx-quotes": ["error", "prefer-double"],
+    "import/no-anonymous-default-export": "off",
+    "comma-dangle": ["error", "always-multiline"],
+    "semi": ["warn", "always"]
+  }
+}

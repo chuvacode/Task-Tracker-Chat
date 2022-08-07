@@ -1,13 +1,13 @@
-import React, {useEffect} from "react";
-import {connect} from "react-redux";
-import {Redirect, withRouter} from "react-router-dom";
-import {getAuthStatus, getInitializeStatus} from "../redux/auth-selectors";
-import {getMeProfile} from "../redux/auth-reducer";
-import {compose} from "redux";
+import React, {useEffect} from 'react';
+import {connect} from 'react-redux';
+import {Redirect, withRouter} from 'react-router-dom';
+import {getAuthStatus, getInitializeStatus} from '../state/auth/selectors';
+import {compose} from 'redux';
+import {getMeProfile} from '../state/auth/operations';
 
 const mapStateToProps = state => ({
   isAuth: getAuthStatus(state),
-  isInitialized: getInitializeStatus(state)
+  isInitialized: getInitializeStatus(state),
 });
 
 const withAuthController = Component => {
@@ -19,11 +19,11 @@ const withAuthController = Component => {
 
     if (props.isInitialized) {
 
-      if (props.location.pathname !== "/login" && !props.isAuth) {
+      if (props.location.pathname !== '/login' && !props.isAuth) {
         return <Redirect to={'/login'}/>;
       }
 
-      if (props.location.pathname === "/login" && props.isAuth) {
+      if (props.location.pathname === '/login' && props.isAuth) {
         return <Redirect to={'/chat'}/>;
       }
 

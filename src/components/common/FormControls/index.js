@@ -1,9 +1,9 @@
-import React, {createRef, useEffect} from "react";
+import React, {createRef, useEffect} from 'react';
 import Style from './FormControlls.module.css';
-import {compose} from "redux";
-import {change} from "redux-form";
-import {connect} from "react-redux";
-import {setEndOfContenteditable} from "../../../utils/setEndOfContenteditable";
+import {compose} from 'redux';
+import {change} from 'redux-form';
+import {connect} from 'react-redux';
+import {setEndOfContenteditable} from '../../../utils/setEndOfContenteditable';
 
 export const Input = ({input, meta, ...props}) => {
   const hasError = meta.touched && meta.error;
@@ -20,11 +20,11 @@ export const Input = ({input, meta, ...props}) => {
 };
 
 const TextArea = ({input, meta, change, ...props}) => {
-  let refSubmit = createRef();
-  let refTextarea = createRef();
+  const refSubmit = createRef();
+  const refTextarea = createRef();
 
   useEffect(() => {
-    let el = refTextarea.current;
+    const el = refTextarea.current;
     refTextarea.current.focus();
     el.innerText = input.value;
     setEndOfContenteditable(el);
@@ -50,10 +50,10 @@ const TextArea = ({input, meta, change, ...props}) => {
 
   return (<div className={Style.textareaContainer}>
     <div className={Style.textarea}
-         aria-multiline='true'
-         contentEditable='true'
-         role='textbox'
-         tabIndex='0'
+         aria-multiline="true"
+         contentEditable="true"
+         role="textbox"
+         tabIndex="0"
          onInput={handlerInput}
          onKeyPress={handlerKeyPress}
          ref={refTextarea}

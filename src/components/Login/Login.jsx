@@ -1,10 +1,10 @@
-import React from "react";
-import Style from "./Login.module.css"
-import {Field} from "redux-form";
-import {Required} from "../../utils/validators";
-import {Input} from "../common/FormControls";
+import React from 'react';
+import Style from './Login.module.css';
+import {Field} from 'redux-form';
+import {Required} from '../../utils/validators';
+import {Input} from '../common/FormControls';
 
-let login = props => {
+const login = props => {
   return (
     <div className={Style.formContainer}>
       <form className={Style.form} onSubmit={props.handleSubmit}>
