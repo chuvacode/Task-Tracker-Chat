@@ -1,7 +1,7 @@
-import React, {ComponentType, FC} from 'react';
+import React, {ComponentType} from 'react';
 import {connect} from 'react-redux';
-import ChatInput from './ChatInput';
-import {reduxForm, reset} from 'redux-form';
+import ChatInput, {ChatInputFormData} from './ChatInput';
+import {FormProps, reduxForm, reset} from 'redux-form';
 import {compose} from 'redux';
 import {chatOperations} from '../../../state/chat';
 
@@ -11,21 +11,23 @@ type MapDispatchToProps = {
 
 type Props = MapDispatchToProps;
 
-const ChatInputContainer = <P extends object>(Component: ComponentType<P>) => (props: P & Props) => {
+type HOK<P> = (WrappedComponent: ComponentType<Omit<P, 'sendMessage'> & FormProps<ChatInputFormData, P>>) => ComponentType<P>;
 
-  const handleSubmit = (formData: any) => {
-    props.sendMessage(formData.message);
+const ChatInputContainer:HOK<Props> = (WrappedComponent) => (props) => {
+  const {sendMessage, ...restProps} = props;
+
+  const handleSubmit = (formData: ChatInputFormData) => {
+    sendMessage(formData.message);
   };
 
-  return <Component onSubmit={handleSubmit} {...props as P} />;
+  return <WrappedComponent onSubmit={handleSubmit} {...restProps} />;
 };
 
-export default compose(
+export default compose<ComponentType>(
   connect(null, {
     sendMessage: chatOperations.sendMessage,
   }),
   ChatInputContainer,
-  reduxForm({form: 'chat-input', onSubmitSuccess: (result, dispatch) => {dispatch(reset('chat-input'));}}),
-)(ChatInput) as React.ComponentType;
-
+  reduxForm<ChatInputFormData>({form: 'chat-input', onSubmitSuccess: (result, dispatch) => {dispatch(reset('chat-input'));}}),
+)(ChatInput);
 

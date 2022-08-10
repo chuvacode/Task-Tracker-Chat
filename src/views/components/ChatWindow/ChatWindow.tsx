@@ -32,7 +32,7 @@ const ChatWindow: FC<Props> = ({dialog, profiles, isLoadingChatIDs, currentProfi
         <ChatHeaderContainer />
         <div className={Style.messenger} ref={refDialog}>
 
-          {isDone() && dialog.messages.map(message => {
+          {isDone() && dialog.messages && dialog.messages.map(message => {
             const profile = (profiles.filter(profile => {
               if (profile.id === message.owner_id) {
                 return profile;
@@ -51,7 +51,7 @@ const ChatWindow: FC<Props> = ({dialog, profiles, isLoadingChatIDs, currentProfi
 
           {!isDone() && <Loader/>}
 
-          {isDone() && dialog.messages.length === 0 && (
+          {isDone() && dialog.messages && dialog.messages.length === 0 && (
             <div className={Style.empty}>Нет сообщений</div>
           )}
         </div>

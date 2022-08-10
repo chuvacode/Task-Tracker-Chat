@@ -1,4 +1,4 @@
-import React, {ComponentType, Fragment} from 'react';
+import React, {ComponentType, FC, Fragment} from 'react';
 import './App.css';
 import {compose} from 'redux';
 import LoginContainer from './views/components/Login/LoginContainer';
@@ -10,9 +10,8 @@ import {connect, Provider} from 'react-redux';
 import reduxStore from './state/store';
 import {authSelectors} from './state/auth';
 
-const App = () => {
-
-    const RootHTML = (props: any) => (
+const App: ComponentType = () => {
+  const RootHTML = (props: any) => (
     <div className="App">
       <Route path="/login" render={
         () => {
@@ -21,12 +20,12 @@ const App = () => {
       }/>
       <Route path="/chat/:id?" render={
         () => (
-            <Fragment>
-                <SidebarContainer {...props} />
-                <div className="content">
-                    <ChatContainer/>
-                </div>
-            </Fragment>
+          <Fragment>
+            <SidebarContainer {...props} />
+            <div className="content">
+              <ChatContainer/>
+            </div>
+          </Fragment>
         )
       }/>
       <Route exact={!props.isAuth} path="/" render={
@@ -43,10 +42,10 @@ const App = () => {
     </div>
   );
 
-  const AppContainer = compose(
+  const AppContainer = compose<ComponentType>(
     withAuthController,
     connect(mapStateToProps))
-  (RootHTML) as ComponentType;
+  (RootHTML);
 
   return <AppContainer/>;
 };

@@ -7,7 +7,7 @@ import {ThunkAction} from 'redux-thunk/es/types';
 import {ActionTypes as authActionTypes} from './auth/actions';
 import {ActionTypes as chatActionTypes} from './chat/actions';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   profile: AuthReducer,
   chat: ChatReducer,
   form: formReducer,
@@ -17,7 +17,7 @@ export type RootState = ReturnType<typeof rootReducer>
 
 type ActionTypes = chatActionTypes | authActionTypes;
 
-export type ThunkActionType = ThunkAction<void, RootState, unknown, ActionTypes>;
+export type ThunkActionType = ThunkAction<Promise<any> | void, RootState, unknown, ActionTypes>;
 
 type ActionProps<T> = T extends {[key: string]: infer U} ? U : never;
 export type InferActionType<T extends {[key: string]: (...args: any[]) => any}> = ReturnType<ActionProps<T>>

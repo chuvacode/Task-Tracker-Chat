@@ -5,16 +5,16 @@ import {Field, InjectedFormProps} from 'redux-form';
 import {TextArea} from '../common/FormControls';
 
 
-type FormData = {
+export type ChatInputFormData = {
     message: string
 }
 
 type Props = {
-    handleSubmit: (formData: FormData) => void
+    handleSubmit: (formData: ChatInputFormData) => void
     reset: () => void
 }
 
-const ChatInput: FC<InjectedFormProps<FormData & Props> & Props> = ({handleSubmit}) => {
+const ChatInput: FC<InjectedFormProps<ChatInputFormData & Props> & Props> = ({handleSubmit}) => {
     return (
         <form onSubmit={handleSubmit} className={Style.formNewMessage}>
             <Field component={TextArea}

@@ -5,12 +5,12 @@ import {Field, InjectedFormProps} from 'redux-form';
 import {Required} from '../../../utils/validators';
 import {Input} from '../common/FormControls';
 
-type FormData = {
+export type LoginFormData = {
     login: string
     password: string
 }
 
-const login: FC<InjectedFormProps<FormData>> = ({handleSubmit}) => {
+const login: FC<InjectedFormProps<LoginFormData>> = ({handleSubmit}) => {
   return (
     <div className={Style.formContainer}>
       <form className={Style.form} onSubmit={handleSubmit}>

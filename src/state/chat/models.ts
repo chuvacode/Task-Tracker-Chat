@@ -4,7 +4,7 @@ export type Dialog = {
     name: string
     description: string
     image: string
-    messages: Array<Message>,
+    messages: Array<Message> | null,
 }
 
 export type Message = {

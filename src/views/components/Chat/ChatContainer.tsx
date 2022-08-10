@@ -1,8 +1,9 @@
-import React, {FC} from 'react';
-import {connect} from 'react-redux';
+import React, {ComponentType, FC} from 'react';
 import Chat from './Chat';
+import {compose} from 'redux';
 
 const ChatContainer: FC = () => <Chat/>;
 
-export default connect()(ChatContainer);
+export default compose<ComponentType>(
+)(ChatContainer);
 

@@ -1,19 +1,16 @@
 import {connect} from 'react-redux';
 import Sidebar from './Sidebar';
-import {authActions, authSelectors, authOperations} from '../../../state/auth';
+import {authOperations, authSelectors} from '../../../state/auth';
 import {RootState} from '../../../state/store';
 import React from 'react';
 import {compose} from 'redux';
 
-type MapStateToProps = {
-    profileName: string | null
-    profileImage: string | null
-}
-
-const mapStateToProps = (state: RootState): MapStateToProps => ({
+const mapStateToProps = (state: RootState) => ({
     profileName: authSelectors.getProfileName(state),
     profileImage: authSelectors.getProfileImage(state),
 });
+
+type MapStateToProps = ReturnType<typeof mapStateToProps>;
 
 type MapDispatchToProps = {
     logout: () => void

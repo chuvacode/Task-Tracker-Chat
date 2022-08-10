@@ -21,7 +21,7 @@ const reducers = (state = initialState, action: ActionTypes): InitialState => {
             return {
                 ...state,
                 dialogs: state.dialogs.map((dialog: Dialog): Dialog => {
-                    if (state.currentDialogID === dialog.id) {
+                    if (dialog.messages && state.currentDialogID === dialog.id) {
                         return {
                             ...dialog,
                             messages: [
