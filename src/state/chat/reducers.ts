@@ -1,6 +1,7 @@
 import {Dialog, Profile} from './models';
 import * as types from './types';
 import {formatterTime} from '../../utils';
+import {ActionTypes} from './actions';
 
 // InitialState
 const initialState = {
@@ -12,12 +13,11 @@ const initialState = {
     isLoadingChatIds: [] as Array<number>,
     selectedMessageIds: [] as Array<number>,
 };
-export type InitialStateType = typeof initialState;
+export type InitialState = typeof initialState;
 
-// Reducer
-export default (state = initialState, action: any): InitialStateType => {
+const reducers = (state = initialState, action: ActionTypes): InitialState => {
     switch (action.type) {
-      case types.ADD_NEW_MESSAGE:
+        case types.ADD_NEW_MESSAGE:
             return {
                 ...state,
                 dialogs: state.dialogs.map((dialog: Dialog): Dialog => {
@@ -27,9 +27,9 @@ export default (state = initialState, action: any): InitialStateType => {
                             messages: [
                                 ...dialog.messages,
                                 {
-                                    id: action.message_id,
+                                    id: action.payload.message_id,
                                     owner_id: 1,
-                                    messageText: action.message,
+                                    messageText: action.payload.message,
                                     timeSending: formatterTime(new Date()),
                                 },
                             ],
@@ -46,16 +46,16 @@ export default (state = initialState, action: any): InitialStateType => {
         case types.SET_DIALOGS:
             return {
                 ...state,
-                dialogs: action.dialogs,
+                dialogs: action.payload.dialogs,
             };
         case types.SET_MESSAGES:
             return {
                 ...state,
                 dialogs: state.dialogs.map(dialog => {
-                    if (dialog.id === action.chat_id) {
+                    if (dialog.id === action.payload.chat_id) {
                         return {
                             ...dialog,
-                            messages: action.messages,
+                            messages: action.payload.messages,
                         };
                     }
                     return dialog;
@@ -92,3 +92,6 @@ export default (state = initialState, action: any): InitialStateType => {
             return state;
     }
 };
+
+// Reducer
+export default reducers;

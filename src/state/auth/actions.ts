@@ -1,20 +1,26 @@
 import * as types from './types';
 import {Profile} from './models';
+import {InferActionType} from '../store';
 
-const setProfile = (profile: Profile) => ({
-    type: types.SET_PROFILE,
-    ...profile,
-});
-const removeProfile = () => ({
-    type: types.REMOVE_PROFILE,
-});
-const setIsInitialized = (status: boolean) => ({
-    type: types.SET_IS_INITIALIZED,
-    status,
-});
+const actions = {
+    setProfile: (profile: Profile) => ({
+        type: types.SET_PROFILE,
+        payload: {
+            profile,
+        },
+    } as const),
+    removeProfile: () => ({
+        type: types.REMOVE_PROFILE,
+    } as const),
+    setIsInitialized: (status: boolean) => ({
+        type: types.SET_IS_INITIALIZED,
+        payload: {
+            status: status,
+        },
+    } as const),
+};
 
-export {
-    setProfile,
-    removeProfile,
-    setIsInitialized,
+export type ActionTypes = InferActionType<typeof actions>;
+export default {
+    ...actions,
 };

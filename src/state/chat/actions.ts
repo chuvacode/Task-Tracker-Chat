@@ -1,53 +1,53 @@
 import * as types from './types';
-import {Profile} from './models';
+import {Dialog, Message, Profile} from './models';
+import {InferActionType} from '../store';
 
-export const addNewMessage = (message_id: number, message: string) => {
-    return {
+const actions = {
+    addNewMessage: (message_id: number, message: string) => ({
         type: types.ADD_NEW_MESSAGE,
-        message,
-        message_id,
-    };
-};
-export const setDialogs = (dialogs: Array<any>) => {
-    return {
+        payload: {
+            message,
+            message_id,
+        },
+    } as const),
+    setDialogs: (dialogs: Array<Dialog>) => ({
         type: types.SET_DIALOGS,
-        dialogs: dialogs,
-    };
-};
-export const setMessages = (chat_id: number, messages: string) => {
-    return {
+        payload: {
+            dialogs: dialogs,
+        },
+    } as const),
+    setMessages: (chat_id: number, messages: Array<Message>) => ({
         type: types.SET_MESSAGES,
-        chat_id: chat_id,
-        messages: messages,
-    };
-};
-export const addProfiles = (profiles: Array<Profile>) => {
-    return {
+        payload: {
+            chat_id: chat_id,
+            messages: messages,
+        },
+    } as const),
+    addProfiles: (profiles: Array<Profile>) => ({
         type: types.ADD_PROFILES,
         profiles: profiles,
-    };
-};
-export const setActiveDialog = (dialog_id: number) => {
-    return {
+    } as const),
+    setActiveDialog: (dialog_id: number) => ({
         type: types.SET_ACTIVE_DIALOG,
         dialog_id,
-    };
-};
-export const setStatusLoadingChat = (chat_id: number, status: boolean) => {
-    return {
+    } as const),
+    setStatusLoadingChat: (chat_id: number, status: boolean) => ({
         type: types.SET_STATUS_LOADING_CHAT,
         status,
         chat_id,
-    };
-};
-export const toggleSelectMessage = (message_id: number) => {
-    return {
+    } as const),
+    toggleSelectMessage: (message_id: number) => ({
         type: types.TOGGLE_SELECT_MESSAGE,
         message_id,
-    };
-};
-export const allUnselect = () => {
-    return {
+    } as const),
+    allUnselect: () => ({
         type: types.ALL_UNSELECT,
-    };
+    } as const),
 };
+
+export type ActionTypes = InferActionType<typeof actions>;
+
+export default {
+    ...actions,
+};
+

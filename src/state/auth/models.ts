@@ -1,7 +1,7 @@
 export type Profile = {
-    id: number
-    name: string
-    image: string
-    email: string
-    username: string
+    id: number | null
+    name: string | null
+    image: string | null
+    email: string | null
+    username: string | null
 }

@@ -1,63 +1,46 @@
-import * as api from '../../api/index';
-import {setProfile} from './actions';
-import {REMOVE_PROFILE, SET_IS_INITIALIZED, SET_PROFILE} from './types';
+import * as types from './types';
+import {Profile} from './models';
+import {ActionTypes} from './actions';
 
-export type InitialStateType = {
-    isInitialized: boolean
-    isAuth: boolean
-    profileId: number | null
-    profileName: string | null
-    profileImage: string | null
-    profileEmail: string | null
-    profileUsername: string | null
-}
-
-const initialState: InitialStateType = {
+const initialState = {
     isInitialized: false,
     isAuth: false,
-    profileId: null,
-    profileName: null,
-    profileImage: null,
-    profileEmail: null,
-    profileUsername: null,
+    profile: {
+        id: null,
+        name: null,
+        image: null,
+        email: null,
+        username: null,
+    } as Profile,
 };
 
-// Types
-type Profile = {
-    profileId: number,
-    profileName: string,
-    profileImage: string,
-    profileEmail: string,
-    profileUsername: string,
-}
+export type InitialStateType = typeof initialState;
 
 // Reducer
-const reducers = (state = initialState, action: any): InitialStateType => {
+const reducers = (state = initialState, action: ActionTypes): InitialStateType => {
     switch (action.type) {
-        case SET_PROFILE:
+        case types.SET_PROFILE:
             return {
                 ...state,
                 isAuth: true,
-                profileId: action.profileId,
-                profileName: action.profileName,
-                profileImage: action.profileImage,
-                profileEmail: action.profileEmail,
-                profileUsername: action.profileUsername,
+                profile: {...action.payload.profile},
             };
-        case REMOVE_PROFILE:
+        case types.REMOVE_PROFILE:
             return {
                 ...state,
                 isAuth: false,
-                profileId: null,
-                profileName: null,
-                profileImage: null,
-                profileEmail: null,
-                profileUsername: null,
+                profile: {
+                    id: null,
+                    name: null,
+                    image: null,
+                    email: null,
+                    username: null,
+                },
             };
-        case SET_IS_INITIALIZED:
+        case types.SET_IS_INITIALIZED:
             return {
                 ...state,
-                isInitialized: action.status,
+                isInitialized: action.payload.status,
             };
         default:
             return state;

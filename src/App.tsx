@@ -1,17 +1,18 @@
-import React, {Fragment} from 'react';
+import React, {ComponentType, Fragment} from 'react';
 import './App.css';
-import {getAuthStatus} from './state/auth/selectors';
 import {compose} from 'redux';
-import LoginContainer from './components/Login/LoginContainer';
+import LoginContainer from './views/components/Login/LoginContainer';
 import {BrowserRouter, Route} from 'react-router-dom';
-import SidebarContainer from './components/Sidebar/SidebarContainer';
-import ChatContainer from './components/Chat/ChatContainer';
+import SidebarContainer from './views/components/Sidebar/SidebarContainer';
+import ChatContainer from './views/components/Chat/ChatContainer';
 import withAuthController from './hoc/withAuthController';
 import {connect, Provider} from 'react-redux';
 import reduxStore from './state/store';
+import {authSelectors} from './state/auth';
 
 const App = () => {
-  const RootHTML = (props: any) => (
+
+    const RootHTML = (props: any) => (
     <div className="App">
       <Route path="/login" render={
         () => {
@@ -19,22 +20,20 @@ const App = () => {
         }
       }/>
       <Route path="/chat/:id?" render={
-        () => {
-          return (
+        () => (
             <Fragment>
-              <SidebarContainer/>
-              <div className="content">
-                <ChatContainer/>
-              </div>
+                <SidebarContainer {...props} />
+                <div className="content">
+                    <ChatContainer/>
+                </div>
             </Fragment>
-          );
-        }
+        )
       }/>
       <Route exact={!props.isAuth} path="/" render={
         () => {
           return (
             <Fragment>
-              <SidebarContainer/>
+              <SidebarContainer {...props} />
               <div className="content">
               </div>
             </Fragment>
@@ -47,13 +46,13 @@ const App = () => {
   const AppContainer = compose(
     withAuthController,
     connect(mapStateToProps))
-  (RootHTML);
+  (RootHTML) as ComponentType;
 
   return <AppContainer/>;
 };
 
 const mapStateToProps = (state: any) => ({
-  isAuth: getAuthStatus(state),
+  isAuth: authSelectors.getAuthStatus(state),
 });
 
 export default () => (

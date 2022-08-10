@@ -1,94 +1,43 @@
 import * as api from '../../api';
-import {removeProfile} from '../auth/actions';
-import * as actions from './actions';
-import {Message, Profile} from './models';
+import actions from './actions';
+import {Dialog, Message, Profile} from './models';
 import {formatterTime} from '../../utils';
+import {authActions} from '../auth';
+import {ThunkActionType} from '../store';
+import {Dispatch} from 'redux';
 
-const getChats = () => (dispatch: any) => {
-    api.Chat.getChats()
-        .then(chats => {
-            dispatch(actions.setDialogs(chats.items.map((dialog: any) => {
-                return {
-                    id: dialog.id,
-                    type: dialog.type,
-                    name: dialog.meta.name,
-                    description: dialog.meta.description,
-                    image: dialog.meta.image_url,
-                    messages: [],
-                };
-            })));
-        })
-        .catch(response => {
-            if (response.status === 401) {
-                dispatch(removeProfile());
-            }
-        });
-};
-const activeDialog = (chat_id: number) => (dispatch: any, state: any) => {
-    // try activate current chat
-    if (state().chat.currentDialogID === chat_id) return;
-    dispatch(actions.allUnselect());
-    dispatch(actions.setStatusLoadingChat(chat_id, true));
-    dispatch(actions.setActiveDialog(chat_id));
-    api.Chat.getMessages(chat_id)
-        .then(messages => {
-            // Set Messages
-            dispatch(actions.setMessages(chat_id, messages.items.map((message: any) => {
-                return {
-                    id: message.id,
-                    messageText: message.message,
-                    timeSending: formatterTime(new Date(message.timestamp_sent)),
-                    owner_id: message.owner_id,
-                };
-            })));
-
-            // Chat User IDs
-            let user_ids = messages.items.reduce((result: Array<number>, message: Message) => {
-                return result.includes(message.owner_id) ? result : [...result, message.owner_id];
-            }, []);
-
-            // Missing User IDs
-            user_ids = user_ids.filter((id: number) =>
-                !(state().chat.profiles.some((profile: Profile) => profile.id === id)));
-
-            if (user_ids.length === 0) {
-                return dispatch(actions.setStatusLoadingChat(chat_id, false));
-            }
-
-            // Get Profiles
-            api.User.getProfiles(user_ids)
-                .then(profiles => {
-                    dispatch(actions.addProfiles(profiles.items.map((profile: any): Profile => {
-                        return {
-                            id: 1,
-                            name: `${profile.first_name}  ${profile.last_name}`,
-                            image: profile.avatar_url,
-                        };
-                    })));
-                    dispatch(actions.setStatusLoadingChat(chat_id, false));
+const operations = {
+    getChats: (): ThunkActionType => (dispatch: Dispatch) => {
+        api.Chat.getChats()
+            .then((chats: any) => {
+                const chats_: Dialog[] = chats.items.map((dialog: any): Dialog => {
+                    return {
+                        id: dialog.id,
+                        type: dialog.type,
+                        name: dialog.meta.name,
+                        description: dialog.meta.description,
+                        image: dialog.meta.image_url,
+                        messages: [],
+                    };
                 });
-        });
-};
-const sendMessage = (message: string) => (dispatch: any, state: any) => {
-    state = state().chat;
-    if (!message || message.trim() === '') return;
-    api.Chat.sendMessage(state.currentDialogID, message, Date.now())
-        .then(message => {
-            dispatch(actions.addNewMessage(message.id, message.message));
-        });
-};
-const deleteMessages = () => (dispatch: any, state: any) => {
-    state = state().chat;
-    const message_ids = state.selectedMessageIds;
-
-    api.Chat.deleteMessages(message_ids).then(status => {
+                dispatch(actions.setDialogs(chats_));
+            })
+            .catch(response => {
+                if (response.status === 401) {
+                    dispatch(authActions.removeProfile());
+                }
+            });
+    },
+    activeDialog: (chat_id: number): ThunkActionType => (dispatch, state) => {
+        // try activate current chat
+        if (state().chat.currentDialogID === chat_id) return;
         dispatch(actions.allUnselect());
-        dispatch(actions.setStatusLoadingChat(state.currentDialogID, true));
-        dispatch(actions.setActiveDialog(state.currentDialogID));
-        api.Chat.getMessages(state.currentDialogID)
+        dispatch(actions.setStatusLoadingChat(chat_id, true));
+        dispatch(actions.setActiveDialog(chat_id));
+        api.Chat.getMessages(chat_id)
             .then(messages => {
                 // Set Messages
-                dispatch(actions.setMessages(state.currentDialogID, messages.items.map((message: any) => {
+                dispatch(actions.setMessages(chat_id, messages.items.map((message: any) => {
                     return {
                         id: message.id,
                         messageText: message.message,
@@ -98,37 +47,97 @@ const deleteMessages = () => (dispatch: any, state: any) => {
                 })));
 
                 // Chat User IDs
-                let user_ids = messages.items.reduce((result: Array<number>, message: any) => {
+                let user_ids = messages.items.reduce((result: Array<number>, message: Message) => {
                     return result.includes(message.owner_id) ? result : [...result, message.owner_id];
                 }, []);
 
                 // Missing User IDs
                 user_ids = user_ids.filter((id: number) =>
-                    !(state.profiles.some((profile: Profile) => profile.id === id)));
+                    !(state().chat.profiles.some((profile: Profile) => profile.id === id)));
 
                 if (user_ids.length === 0) {
-                    return dispatch(actions.setStatusLoadingChat(state.currentDialogID, false));
+                    return dispatch(actions.setStatusLoadingChat(chat_id, false));
                 }
 
                 // Get Profiles
                 api.User.getProfiles(user_ids)
                     .then(profiles => {
-                        dispatch(actions.addProfiles(profiles.items.map((profile: any) => {
+                        dispatch(actions.addProfiles(profiles.items.map((profile: any): Profile => {
                             return {
                                 id: profile.id,
                                 name: `${profile.first_name}  ${profile.last_name}`,
                                 image: profile.avatar_url,
                             };
                         })));
-                        dispatch(actions.setStatusLoadingChat(state.currentDialogID, false));
+                        dispatch(actions.setStatusLoadingChat(chat_id, false));
                     });
             });
-    });
+    },
+    sendMessage: (message: string): ThunkActionType => (dispatch, state) => {
+        const chatState = state().chat;
+        if (!message || message.trim() === '') return;
+        api.Chat.sendMessage(chatState.currentDialogID, message, Date.now())
+            .then(message => {
+                dispatch(actions.addNewMessage(message.id, message.message));
+            });
+    },
+    deleteMessages: (): ThunkActionType => (dispatch, state) => {
+        const chatState = state().chat;
+        const message_ids = chatState.selectedMessageIds;
+
+        api.Chat.deleteMessages(message_ids).then(status => {
+            if (!chatState.currentDialogID) return;
+            dispatch(actions.allUnselect());
+            dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, true));
+            dispatch(actions.setActiveDialog(chatState.currentDialogID));
+            api.Chat.getMessages(chatState.currentDialogID)
+                .then(messages => {
+                    if (!chatState.currentDialogID) return;
+
+                    // Set Messages
+                    dispatch(actions.setMessages(chatState.currentDialogID, messages.items.map((message: any) => {
+                        return {
+                            id: message.id,
+                            messageText: message.message,
+                            timeSending: formatterTime(new Date(message.timestamp_sent)),
+                            owner_id: message.owner_id,
+                        };
+                    })));
+
+                    // Chat User IDs
+                    let user_ids = messages.items.reduce((result: Array<number>, message: any) => {
+                        return result.includes(message.owner_id) ? result : [...result, message.owner_id];
+                    }, []);
+
+                    // Missing User IDs
+                    user_ids = user_ids.filter((id: number) =>
+                        !(chatState.profiles.some((profile: Profile) => profile.id === id)));
+
+                    if (user_ids.length === 0) {
+                        return dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, false));
+                    }
+
+                    // Get Profiles
+                    api.User.getProfiles(user_ids)
+                        .then(profiles => {
+                            if (!chatState.currentDialogID) return;
+                            dispatch(actions.addProfiles(profiles.items.map((profile: any) => {
+                                return {
+                                    id: profile.id,
+                                    name: `${profile.first_name}  ${profile.last_name}`,
+                                    image: profile.avatar_url,
+                                };
+                            })));
+                            dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, false));
+                        });
+                });
+        });
+
+    },
 };
 
-export {
-    getChats,
-    activeDialog,
-    sendMessage,
-    deleteMessages,
+operations.activeDialog(1);
+
+export default {
+    ...operations,
 };

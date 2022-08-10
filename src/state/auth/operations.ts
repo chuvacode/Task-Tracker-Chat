@@ -1,29 +1,10 @@
 import * as api from '../../api';
-import * as actions from './actions';
+import actions from './actions';
+import {ThunkActionType} from '../store';
 
-const getMeProfile = () => (dispatch: any) => {
-    api.Auth.getMe()
-        .then(profile => {
-            dispatch(actions.setProfile({
-                id: profile.id,
-                name: `${profile.first_name} ${profile.last_name}`,
-                image: profile.avatar_url,
-                email: profile.email,
-                username: profile.username,
-            }));
-        })
-        .catch(response => {
-            if (response.status === 401) {
-                dispatch(actions.removeProfile());
-            }
-        })
-        .finally(() => {
-            dispatch(actions.setIsInitialized(true));
-        });
-};
-const login = (login: string, password: string) => (dispatch: any) => {
-    api.Auth.getCookie().then(() => {
-        api.Auth.login(login, password)
+const operations = {
+    getMeProfile: (): ThunkActionType => (dispatch) => {
+        api.Auth.getMe()
             .then(profile => {
                 dispatch(actions.setProfile({
                     id: profile.id,
@@ -32,18 +13,38 @@ const login = (login: string, password: string) => (dispatch: any) => {
                     email: profile.email,
                     username: profile.username,
                 }));
+            })
+            .catch(response => {
+                if (response.status === 401) {
+                    dispatch(actions.removeProfile());
+                }
+            })
+            .finally(() => {
+                dispatch(actions.setIsInitialized(true));
             });
-    });
-};
-const logout = () => (dispatch: any) => {
-    api.Auth.logout()
-        .then(response => {
-            dispatch(actions.removeProfile());
+    },
+    login: (login: string, password: string): ThunkActionType => (dispatch) => {
+        api.Auth.getCookie().then(() => {
+            api.Auth.login(login, password)
+                .then(profile => {
+                    dispatch(actions.setProfile({
+                        id: profile.id,
+                        name: `${profile.first_name} ${profile.last_name}`,
+                        image: profile.avatar_url,
+                        email: profile.email,
+                        username: profile.username,
+                    }));
+                });
         });
+    },
+    logout: (): ThunkActionType => (dispatch) => {
+        api.Auth.logout()
+            .then(response => {
+                dispatch(actions.removeProfile());
+            });
+    },
 };
 
-export {
-    getMeProfile,
-    login,
-    logout,
+export default {
+    ...operations,
 };
