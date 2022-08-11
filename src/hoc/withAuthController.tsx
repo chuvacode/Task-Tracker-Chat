@@ -1,56 +1,38 @@
 import React, {ComponentType, FC, useEffect} from 'react';
-import {connect} from 'react-redux';
-import {Redirect, RouteComponentProps, withRouter} from 'react-router-dom';
-import {compose} from 'redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {Redirect, useHistory} from 'react-router-dom';
 import {authOperations, authSelectors} from '../state/auth';
-import {RootState} from '../state/store';
+import {DispatchWithThunk} from '../state/store';
 
-type MapStateToProps = ReturnType<typeof mapStateToProps>
-
-type MapDispatchToProps = {
-  getMeProfile: () => void
-}
-
-type Props = MapStateToProps & MapDispatchToProps;
-
-const mapStateToProps = (state: RootState) => ({
-  isAuth: authSelectors.getAuthStatus(state),
-  isInitialized: authSelectors.getInitializeStatus(state),
-});
-
-type HOK<P> = (component: ComponentType<P>) => ComponentType
-
-const withAuthController:HOK<Props> = (Component) => {
-
-  const RedirectComponent: FC<Props & RouteComponentProps> = (props) => {
+const withAuthController:(component: ComponentType) => ComponentType = (Component) => {
+  const RedirectComponent: FC = () => {
+    const history = useHistory();
+    const dispatch: DispatchWithThunk = useDispatch();
 
     useEffect(() => {
-      props.getMeProfile();
+      dispatch(authOperations.getMeProfile());
     }, []);
 
-    if (props.isInitialized) {
+    const isAuth = useSelector(authSelectors.getAuthStatus);
+    const isInitialized = useSelector(authSelectors.getInitializeStatus);
+    const getMeProfile = useSelector(authSelectors.getInitializeStatus);
+    const pathname = history.location.pathname;
 
-      if (props.location.pathname !== '/login' && !props.isAuth) {
+    // debugger
+
+    if (isInitialized) {
+      if (pathname !== '/login' && !isAuth) {
         return <Redirect to={'/login'}/>;
       }
-
-      if (props.location.pathname === '/login' && props.isAuth) {
+      if (pathname === '/login' && isAuth) {
         return <Redirect to={'/chat'}/>;
       }
-
-      return <Component {...props}/>;
+      return <Component/>;
     } else {
       return <div></div>;
     }
   };
-
-  return compose<ComponentType>(
-      connect(mapStateToProps, {
-        getMeProfile: authOperations.getMeProfile,
-      }),
-      withRouter)
-  (RedirectComponent);
-
+  return RedirectComponent;
 };
 
 export default withAuthController;

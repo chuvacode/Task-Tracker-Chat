@@ -35,6 +35,8 @@ const ChatManager: FC<Props & RouteComponentProps<{id?: string | undefined}>> = 
     }
   }, [dialogs]);
 
+
+
   return (
     <div className={Style.chatsManager}>
       <div className={Style.chatsManagerHeader}>

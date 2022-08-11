@@ -1,34 +1,49 @@
-import React, {FC, FormEventHandler} from 'react';
+import React, {FC} from 'react';
 // @ts-ignore
 import Style from './Login.module.css';
-import {Field, InjectedFormProps} from 'redux-form';
 import {Required} from '../../../utils/validators';
 import {Input} from '../common/FormControls';
+import {Form, Formik} from 'formik';
+import {useDispatch} from 'react-redux';
+import {authOperations} from '../../../state/auth';
+import {DispatchWithThunk, RootState} from '../../../state/store';
+import {AnyAction} from 'redux';
+import {ThunkDispatch} from 'redux-thunk/es/types';
 
 export type LoginFormData = {
-    login: string
-    password: string
+  login: string
+  password: string
 }
 
-const login: FC<InjectedFormProps<LoginFormData>> = ({handleSubmit}) => {
+const Login: FC = () => {
+
+  const dispatch: DispatchWithThunk = useDispatch();
+
+  const login = (formData: LoginFormData) => {
+    dispatch(authOperations.login(formData.login, formData.password));
+  };
+
   return (
     <div className={Style.formContainer}>
-      <form className={Style.form} onSubmit={handleSubmit}>
-        <div className={Style.formTitle}>Вход</div>
-        <Field component={Input}
-               name={'login'}
-               type="text"
-               placeholder={'Имя пользователя'}
-               validate={[Required]}/>
-        <Field component={Input}
-               name={'password'}
-               type="password"
-               placeholder={'Пароль'}
-               validate={[Required]}/>
-        <button className={Style.button}>Войти</button>
-      </form>
+
+      <Formik initialValues={{login: '', password: ''}} onSubmit={login}>
+        {() => (
+          <Form className={Style.form}>
+            <div className={Style.formTitle}>Вход</div>
+            <Input name="login"
+                   type="text"
+                   placeholder="Имя пользователя"
+                   validate={Required}/>
+            <Input name="password"
+                   type="password"
+                   placeholder="Пароль"
+                   validate={Required}/>
+            <button className={Style.button}>Войти</button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
 
-export default login;
+export default Login;

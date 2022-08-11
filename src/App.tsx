@@ -1,7 +1,6 @@
-import React, {ComponentType, FC, Fragment} from 'react';
+import React, {ComponentType, Fragment} from 'react';
 import './App.css';
 import {compose} from 'redux';
-import LoginContainer from './views/components/Login/LoginContainer';
 import {BrowserRouter, Route} from 'react-router-dom';
 import SidebarContainer from './views/components/Sidebar/SidebarContainer';
 import ChatContainer from './views/components/Chat/ChatContainer';
@@ -9,13 +8,14 @@ import withAuthController from './hoc/withAuthController';
 import {connect, Provider} from 'react-redux';
 import reduxStore from './state/store';
 import {authSelectors} from './state/auth';
+import LoginPage from './views/pages/LoginPage/LoginPage';
 
 const App: ComponentType = () => {
   const RootHTML = (props: any) => (
     <div className="App">
       <Route path="/login" render={
         () => {
-          return <LoginContainer/>;
+          return <LoginPage/>;
         }
       }/>
       <Route path="/chat/:id?" render={

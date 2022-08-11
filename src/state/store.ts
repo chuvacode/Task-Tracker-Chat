@@ -1,9 +1,9 @@
-import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import {AnyAction, applyMiddleware, combineReducers, compose, createStore} from 'redux';
 import AuthReducer from './auth/reducers';
 import ChatReducer from './chat/reducers';
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import {reducer as formReducer} from 'redux-form';
-import {ThunkAction} from 'redux-thunk/es/types';
+import {ThunkAction, ThunkDispatch, ThunkMiddleware} from 'redux-thunk/es/types';
 import {ActionTypes as authActionTypes} from './auth/actions';
 import {ActionTypes as chatActionTypes} from './chat/actions';
 
@@ -19,13 +19,17 @@ type ActionTypes = chatActionTypes | authActionTypes;
 
 export type ThunkActionType = ThunkAction<Promise<any> | void, RootState, unknown, ActionTypes>;
 
-type ActionProps<T> = T extends {[key: string]: infer U} ? U : never;
-export type InferActionType<T extends {[key: string]: (...args: any[]) => any}> = ReturnType<ActionProps<T>>
+type ActionProps<T> = T extends { [key: string]: infer U } ? U : never;
+export type InferActionType<T extends { [key: string]: (...args: any[]) => any }> = ReturnType<ActionProps<T>>
 
 // @ts-ignore
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose || compose;
-const store = createStore(rootReducer, composeEnhancers(
-  applyMiddleware(thunkMiddleware),
-));
+
+const thunkMiddleware: ThunkMiddleware<RootState, AnyAction> = thunk;
+const middleware = composeEnhancers(applyMiddleware(thunkMiddleware));
+
+const store = createStore(rootReducer, middleware);
+
+export type DispatchWithThunk = typeof store.dispatch;
 
 export default store;

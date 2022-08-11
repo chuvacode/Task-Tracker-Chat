@@ -1,6 +1,8 @@
 import * as api from '../../api';
-import actions from './actions';
-import {ThunkActionType} from '../store';
+import actions, {ActionTypes} from './actions';
+import {RootState, ThunkActionType} from '../store';
+import {ThunkAction, ThunkDispatch} from 'redux-thunk/es/types';
+import {Action, Dispatch} from 'redux';
 
 const operations = {
   getMeProfile: (): ThunkActionType => (dispatch) => {
@@ -23,6 +25,11 @@ const operations = {
         dispatch(actions.setIsInitialized(true));
       });
   },
+  // login: function (): ThunkDispatch<RootState, unknown, ActionTypes> {
+  //   return (dispatch: Dispatch) => {
+  //     console.log('32');
+  //   }
+  // },
   login: (login: string, password: string): ThunkActionType => async (dispatch) => {
 
     const statusCookie = await api.Auth.getCookie();
@@ -44,6 +51,12 @@ const operations = {
       });
   },
 };
+
+type InferActionsTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U } ? U : never
+type BaseThunkType<A extends Action = Action, R = Promise<void>> = ThunkAction<R, RootState, unknown, A>
+
+type ActionsType = InferActionsTypes<typeof actions>
+type ThunkType = BaseThunkType<ActionsType>
 
 export default {
   ...operations,
