@@ -3,9 +3,14 @@ import actions from './actions';
 import {Dialog, Message, Profile} from './models';
 import {formatterTime} from '../../utils';
 import {ThunkActionType} from '../store';
+import Echo from 'laravel-echo';
+import axios from 'axios';
 
 const operations = {
   getChats: (): ThunkActionType => async (dispatch, state) => {
+    const authState = state().profile;
+    const chatState = state().chat;
+
     const chats = await api.Chat.getChats();
     const chats_: Dialog[] = chats.items.map((dialog: any): Dialog => {
       return {
@@ -19,11 +24,58 @@ const operations = {
     });
     await dispatch(actions.setDialogs(chats_));
 
-    // .catch(response => {
-    //   if (response.status === 401) {
-    //     dispatch(authActions.removeProfile());
-    //   }
-    // });
+    // @ts-ignore
+    if (window.Pusher === undefined) {
+      // @ts-ignore
+      window.Pusher = require('pusher-js');
+      // @ts-ignore
+      window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '1',
+        wsHost: '127.0.0.1',
+        wsPort: 6001,
+        forceTLS: false,
+        disableStats: true,
+        cluster: 'mt1',
+        authorizer: (channel: any, options: any) => {
+          return {
+            authorize: (socketId: any, callback: any) => {
+              axios({
+                method: 'POST',
+                url: 'http://localhost:8000/api/broadcasting/auth',
+                headers: {
+                  Authorization: `Bearer ${authState.token}`,
+                },
+                data: {
+                  socket_id: socketId,
+                  channel_name: channel.name,
+                },
+              })
+                .then((response) => {
+                  callback(false, response.data);
+                })
+                .catch((error) => {
+                  callback(true, error);
+                });
+            },
+          };
+        },
+      });
+
+      chats_.forEach(chat => {
+        // @ts-ignore
+        window.Echo.private(`chat.${chat.id}`)
+          .listen('.new-message-event', (e: any) => {
+            dispatch(actions.insertMessage(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message));
+          });
+      });
+    }
+
+    // @ts-ignore
+    // window.Echo.private(`chat.${chat_id}`)
+    //   .listenForWhisper('new-message-event', (e: any) => {
+    //     console.log(e);
+    //   });
   },
   activeDialog: (chat_id: number): ThunkActionType => async (dispatch, state) => {
     const chatState = state().chat;
@@ -81,15 +133,13 @@ const operations = {
             dispatch(actions.setStatusLoadingChat(chat_id, false));
           });
       });
+
   },
   sendMessage: (message: string): ThunkActionType => (dispatch, state) => {
     const chatState = state().chat;
     if (!message || message.trim() === '') return;
     if (!chatState.currentDialogID) return;
-    api.Chat.sendMessage(chatState.currentDialogID, message, Date.now())
-      .then(message => {
-        dispatch(actions.addNewMessage(message.id, message.message));
-      });
+    api.Chat.sendMessage(chatState.currentDialogID, message, Date.now());
   },
   deleteMessages: (): ThunkActionType => (dispatch, state) => {
     const chatState = state().chat;

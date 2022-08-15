@@ -3,6 +3,16 @@ import {Dialog, Message, Profile} from './models';
 import {InferActionType} from '../store';
 
 const actions = {
+    insertMessage: (chat_id: number, owner_id: number, message_id: number, timeSend: string, message: string) => ({
+        type: types.INSERT_MESSAGE,
+        payload: {
+            chat_id,
+            owner_id,
+            message_id,
+            timeSend,
+            message,
+        },
+    } as const),
     addNewMessage: (message_id: number, message: string) => ({
         type: types.ADD_NEW_MESSAGE,
         payload: {

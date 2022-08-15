@@ -15,6 +15,7 @@ beforeEach(() => {
     profile: {
       isInitialized: false,
       isAuth: false,
+      token: null,
       profile: {
         id: null,
         name: null,

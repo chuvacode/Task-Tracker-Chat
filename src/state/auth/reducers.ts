@@ -5,6 +5,7 @@ import {ActionTypes} from './actions';
 const initialState = {
     isInitialized: false,
     isAuth: false,
+    token: null as string | null,
     profile: {
         id: null,
         name: null,
@@ -41,6 +42,11 @@ const reducers = (state = initialState, action: ActionTypes): InitialStateType =
             return {
                 ...state,
                 isInitialized: action.payload.status,
+            };
+        case types.SET_TOKEN:
+            return {
+                ...state,
+                token: action.payload.token,
             };
         default:
             return state;

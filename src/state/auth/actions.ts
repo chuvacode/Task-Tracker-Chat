@@ -15,7 +15,13 @@ const actions = {
     setIsInitialized: (status: boolean) => ({
         type: types.SET_IS_INITIALIZED,
         payload: {
-            status: status,
+            status,
+        },
+    } as const),
+    setToken: (token: string) => ({
+        type: types.SET_TOKEN,
+        payload: {
+            token,
         },
     } as const),
 };

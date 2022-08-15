@@ -16,6 +16,9 @@ const selectors = {
     getProfileID: (state: RootState) => {
         return state.profile.profile.id;
     },
+    getToken: (state: RootState) => {
+        return state.profile.token;
+    },
 };
 
 export default {

@@ -20,4 +20,11 @@ export const Auth = {
         throw reason.response;
       });
   },
+  getToken: () => {
+    return api.post('sanctum/token')
+      .then(response => response.data)
+      .catch(reason => {
+        throw reason.response;
+      });
+  },
 };
