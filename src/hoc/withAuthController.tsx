@@ -10,13 +10,20 @@ const withAuthController:(component: ComponentType<ComponentProps<any>>) => Comp
     const dispatch: DispatchWithThunk = useDispatch();
     const isAuth = useSelector(authSelectors.getAuthStatus);
     const isInitialized = useSelector(authSelectors.getInitializeStatus);
-    const isToken = useSelector(authSelectors.getToken) !== null;
+    const token = useSelector(authSelectors.getToken);
     const pathname = history.location.pathname;
 
     useEffect(() => {
       dispatch(authOperations.getMeProfile());
       dispatch(authOperations.getToken());
     }, []);
+
+    // Create Echo
+    useEffect(() => {
+      if (token !== null) {
+        dispatch(authOperations.createEcho());
+      }
+    }, [token])
 
     if (isInitialized) {
       if (pathname !== '/login' && !isAuth) {
@@ -26,7 +33,6 @@ const withAuthController:(component: ComponentType<ComponentProps<any>>) => Comp
         history.push('/chat');
       }
       return <Component/>;
-
     } else {
       return <div></div>;
     }

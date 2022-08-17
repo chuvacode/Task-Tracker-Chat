@@ -1,8 +1,8 @@
 import * as api from '../../api';
-import actions, {ActionTypes} from './actions';
+import actions from './actions';
 import {RootState, ThunkActionType} from '../store';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk/es/types';
-import {Action, Dispatch} from 'redux';
+import {ThunkAction} from 'redux-thunk/es/types';
+import {Action} from 'redux';
 
 const operations = {
   getMeProfile: (): ThunkActionType => (dispatch) => {
@@ -54,6 +54,12 @@ const operations = {
     const token = await api.Auth.getToken();
     if (!!token && token !== '') {
       dispatch(actions.setToken(token));
+    }
+  },
+  createEcho: (): ThunkActionType => (dispatch, getState) => {
+    const state = getState();
+    if (state.profile.token) {
+      api.Auth.createEcho(state.profile.token);
     }
   },
 };

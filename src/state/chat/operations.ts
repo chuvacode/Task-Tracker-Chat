@@ -3,14 +3,11 @@ import actions from './actions';
 import {Dialog, Message, Profile} from './models';
 import {formatterTime} from '../../utils';
 import {ThunkActionType} from '../store';
-import Echo from 'laravel-echo';
-import axios from 'axios';
+import {MessageSubscriber} from '../../api/chat';
 
 const operations = {
-  getChats: (): ThunkActionType => async (dispatch, state) => {
-    const authState = state().profile;
-    const chatState = state().chat;
-
+  getChats: (): ThunkActionType => async (dispatch, getState) => {
+    const chatState = getState().chat;
     const chats = await api.Chat.getChats();
     const chats_: Dialog[] = chats.items.map((dialog: any): Dialog => {
       return {
@@ -22,60 +19,18 @@ const operations = {
         messages: null,
       };
     });
+
     await dispatch(actions.setDialogs(chats_));
 
-    // @ts-ignore
-    if (window.Pusher === undefined) {
-      // @ts-ignore
-      window.Pusher = require('pusher-js');
-      // @ts-ignore
-      window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: '1',
-        wsHost: '127.0.0.1',
-        wsPort: 6001,
-        forceTLS: false,
-        disableStats: true,
-        cluster: 'mt1',
-        authorizer: (channel: any, options: any) => {
-          return {
-            authorize: (socketId: any, callback: any) => {
-              axios({
-                method: 'POST',
-                url: 'http://localhost:8000/api/broadcasting/auth',
-                headers: {
-                  Authorization: `Bearer ${authState.token}`,
-                },
-                data: {
-                  socket_id: socketId,
-                  channel_name: channel.name,
-                },
-              })
-                .then((response) => {
-                  callback(false, response.data);
-                })
-                .catch((error) => {
-                  callback(true, error);
-                });
-            },
-          };
-        },
-      });
+    chats_.forEach(chat => {
+      const callback: MessageSubscriber = (...args) => {
+        if (chat.id === args[0]) {
+          dispatch(actions.insertMessage(...args));
+        }
+      };
 
-      chats_.forEach(chat => {
-        // @ts-ignore
-        window.Echo.private(`chat.${chat.id}`)
-          .listen('.new-message-event', (e: any) => {
-            dispatch(actions.insertMessage(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message));
-          });
-      });
-    }
-
-    // @ts-ignore
-    // window.Echo.private(`chat.${chat_id}`)
-    //   .listenForWhisper('new-message-event', (e: any) => {
-    //     console.log(e);
-    //   });
+      api.Chat.subscribe(chat.id, callback);
+    });
   },
   activeDialog: (chat_id: number): ThunkActionType => async (dispatch, state) => {
     const chatState = state().chat;
