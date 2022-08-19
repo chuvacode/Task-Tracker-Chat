@@ -3,11 +3,13 @@ import * as types from './types';
 import {formatterTime} from '../../utils';
 import {ActionTypes} from './actions';
 
+export type ChatTab = 'group' | 'contact';
+
 // InitialState
 const initialState = {
   dialogs: [] as Array<Dialog>,
   profiles: [] as Array<Profile>,
-  activeTab: 'group' as string,
+  activeTab: 'group' as ChatTab,
   currentDialogID: null as number | null,
   countNewMessages: 1 as number,
   isLoadingChatIds: [] as Array<number>,
@@ -18,7 +20,7 @@ export type InitialState = typeof initialState;
 const reducers = (state = initialState, action: ActionTypes): InitialState => {
   switch (action.type) {
     case types.INSERT_MESSAGE:
-      if (action.payload.chat_id !== state.currentDialogID) return state;
+      // if (action.payload.chat_id !== state.currentDialogID) return state;
       return {
         ...state,
         dialogs: state.dialogs.map((dialog: Dialog): Dialog => {
@@ -30,8 +32,9 @@ const reducers = (state = initialState, action: ActionTypes): InitialState => {
                 {
                   id: action.payload.message_id,
                   owner_id: action.payload.owner_id,
-                  messageText: action.payload.message,
+                  message: action.payload.message,
                   timeSending: formatterTime(new Date(action.payload.timeSend)),
+                  events: [],
                 },
               ],
             };
@@ -51,8 +54,9 @@ const reducers = (state = initialState, action: ActionTypes): InitialState => {
                 {
                   id: action.payload.message_id,
                   owner_id: 1,
-                  messageText: action.payload.message,
+                  message: action.payload.message,
                   timeSending: formatterTime(new Date()),
+                  events: [],
                 },
               ],
             };
@@ -109,6 +113,32 @@ const reducers = (state = initialState, action: ActionTypes): InitialState => {
       return {
         ...state,
         selectedMessageIds: [],
+      };
+    case types.SET_ACTIVE_TAB:
+      return {
+        ...state,
+        activeTab: action.payload.tab,
+      };
+    case types.RECEIVED_MESSAGE_EVENT:
+      return {
+        ...state,
+        dialogs: state.dialogs.map(dialog => {
+          if (dialog.id === action.payload.chat_id && dialog.messages) {
+            return {
+              ...dialog,
+              messages: dialog.messages.map(message => {
+                if (message.id === action.payload.message_id) {
+                  return {
+                    ...message,
+                    events: [...message.events, action.payload.event],
+                  };
+                }
+                return message;
+              }),
+            };
+          }
+          return dialog;
+        }),
       };
     default:
       return state;

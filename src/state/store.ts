@@ -3,7 +3,7 @@ import AuthReducer from './auth/reducers';
 import ChatReducer from './chat/reducers';
 import thunk from 'redux-thunk';
 import {reducer as formReducer} from 'redux-form';
-import {ThunkAction, ThunkDispatch, ThunkMiddleware} from 'redux-thunk/es/types';
+import {ThunkAction, ThunkMiddleware} from 'redux-thunk/es/types';
 import {ActionTypes as authActionTypes} from './auth/actions';
 import {ActionTypes as chatActionTypes} from './chat/actions';
 

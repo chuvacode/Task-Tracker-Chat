@@ -4,14 +4,25 @@ export type Dialog = {
     name: string
     description: string
     image: string
-    messages: Array<Message> | null,
+    count_unread: number,
+    messages: Array<Message>,
 }
 
 export type Message = {
     id: number
     owner_id: number
-    messageText: string
+    message: string
     timeSending: string
+    events: Array<MessageEvent>
+}
+
+export type MessageEvent = {
+    id: number
+    message_id: number
+    user_id: number
+    type: string
+    created_at: string
+    updated_at: string
 }
 
 export type Profile = {

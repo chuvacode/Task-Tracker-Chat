@@ -12,13 +12,13 @@ const NavSidebar: FC<Props> = ({countNewMessages}) => {
         <div className={Style.nav}>
             <NavLink className={Style.link + ' ' + Style.linkActive} to="/chat">
                 Сообщения
-                {countNewMessages > 0 ? <span className={Style.counter}>{countNewMessages}</span> : ''}
+                {/*{countNewMessages > 0 ? <span className={Style.counter}>{countNewMessages}</span> : ''}*/}
             </NavLink>
-            <NavLink className={Style.link} to="/task-line">
-                Лента задач
-                <span className={Style.counter}>12</span>
-            </NavLink>
-            <NavLink className={Style.link} to="/clients">Клиенты</NavLink>
+            {/*<NavLink className={Style.link} to="/task-line">*/}
+            {/*    Лента задач*/}
+            {/*    <span className={Style.counter}>12</span>*/}
+            {/*</NavLink>*/}
+            {/*<NavLink className={Style.link} to="/clients">Клиенты</NavLink>*/}
         </div>
     );
 };

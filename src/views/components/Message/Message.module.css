@@ -1,6 +1,7 @@
 .message, .myMessage {
     cursor: pointer;
     display: flex;
+    max-width: 90%;
 }
 
 .messageInfo {
@@ -59,8 +60,13 @@
 
 .myMessage .messageInfo {
     display: flex;
+    align-items: center;
     margin: 10px 0 0 0;
     justify-content: flex-end;
+}
+
+.myMessage .messageInfo svg {
+    margin-right: 5px;
 }
 
 .selected {
@@ -86,5 +92,7 @@
 
 .messageContainer {
     display: flex;
+    position: relative;
     margin-bottom: 20px;
 }
+

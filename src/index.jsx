@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import App from './App.tsx';
-import Echo from 'laravel-echo';
-import axios from 'axios';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

@@ -2,11 +2,14 @@ import {api} from './index';
 import {WS} from './auth';
 import {Channel} from 'laravel-echo';
 
-export type MessageSubscriber = (chat_id: number, owner_id: number, message_id: number, timestamp_sent: string,
+export type NewMessageEventSubscriber = (chat_id: number, owner_id: number, message_id: number, timestamp_sent: string,
                                    message: string) => void
 
+export type MessageEventSubscriber = (chat_id: number, message_id: number, event: MessageEvent) => void
+
 const subscribers = {
-  messageReceived: [] as MessageSubscriber[],
+  messageReceived: [] as NewMessageEventSubscriber[],
+  messageWasRead: null as MessageEventSubscriber | null,
 };
 
 type ChannelObject = {
@@ -26,6 +29,30 @@ const handlerNewMessage = () => {
     });
 };
 
+type MessageEvent = {
+  id: number
+  message_id: number
+  user_id: number
+  type: string
+  created_at: string
+  updated_at: string
+}
+
+type Message = {
+  id: number
+  chat_id: number
+  owner_id: number
+  message: string
+  timestamp_sent: string
+  created_at: string
+  updated_at: string
+}
+
+type ReadMessageEvent = {
+  event: MessageEvent
+  message: Message
+}
+
 const createChannel = (name: string): ChannelObject => {
 
   const channel: ChannelObject = {
@@ -38,6 +65,14 @@ const createChannel = (name: string): ChannelObject => {
       s(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message);
     });
   });
+
+  const handlerReadMessageEvent: (event: ReadMessageEvent) => void = ({event, message}) => {
+    if (subscribers.messageWasRead) {
+      subscribers.messageWasRead(message.chat_id, message.id, event);
+    }
+  };
+
+  channel.channel.listen('.read-message-event', handlerReadMessageEvent);
 
   channels = [...channels, channel];
 
@@ -52,19 +87,24 @@ const findChannel = (name: string): ChannelObject | null => {
 };
 
 export const Chat = {
-  subscribe: (chat_id: number, callback: MessageSubscriber) => {
+  subscribeMessageReceive: (chat_id: number, callback: NewMessageEventSubscriber) => {
     // if channel not found, then create
     const findResult = findChannel(`chat.${chat_id}`);
     if (findResult === null) {
       createChannel(`chat.${chat_id}`);
       subscribers.messageReceived = [...subscribers.messageReceived, callback];
-      console.log(subscribers.messageReceived);
     }
+
     // @ts-ignore
     // window.Echo.private(`chat.${chat_id}`)
     //   .listenForWhisper('new-message-event', (e: any) => {
     //     console.log(e);
     //   });
+  },
+  subscribeWasReadMessageEvent: (callback: MessageEventSubscriber) => {
+    if (subscribers.messageWasRead === null) {
+      subscribers.messageWasRead = callback;
+    }
   },
   getChats: async () => {
     await new Promise(resolve => {
@@ -94,6 +134,11 @@ export const Chat = {
       message,
       timestamp,
     })
+      .then(response => response.data);
+  },
+  markRead: (message_ids: Array<number>) => {
+    console.log('DD');
+    return api.put('message?act=mark_read', {ids: message_ids})
       .then(response => response.data);
   },
 };

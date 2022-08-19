@@ -1,7 +1,8 @@
 .chatsManager {
     display: flex;
     flex-direction: column;
-    max-width: 400px;
+    max-width: 370px;
+    width: 100%;
 }
 
 .chatsManagerHeader {
@@ -9,6 +10,7 @@
 }
 
 .chatsManagerHeader__item {
+    cursor: pointer;
     font-weight: 600;
     font-size: 27px;
     line-height: 150%;
@@ -102,12 +104,12 @@
 
 .dialog__title {
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
 }
 
 .dialog__subtitle {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #8C939F;
     margin-top: 3px;
@@ -135,9 +137,19 @@
     margin-left: auto;
     background: rgba(49, 126, 246, 1);
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 12px;
     line-height: 100%;
     letter-spacing: 0.02em;
     color: #FFFFFF;
+    min-width: 18px;
+    text-align: center;
+}
+
+.emptyChatList {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    font-weight: 600;
+    color: #8C939F;
 }

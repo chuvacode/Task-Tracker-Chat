@@ -18,6 +18,9 @@ const selectors = {
     getNameCurrentChat: (state: RootState) => {
         return getCurrentChat(state).name;
     },
+    getCurrentDialogID: (state: RootState) => {
+        return state.chat.currentDialogID;
+    },
     getDescriptionCurrentChat: (state: RootState) => {
         return getCurrentChat(state).description;
     },
@@ -29,6 +32,12 @@ const selectors = {
     },
     getProfiles: (state: RootState) => {
         return state.chat.profiles;
+    },
+    getActiveTab: (state: RootState) => {
+        return state.chat.activeTab;
+    },
+    getDialogs: (state: RootState) => {
+        return state.chat.dialogs;
     },
 };
 

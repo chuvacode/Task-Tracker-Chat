@@ -1,12 +1,14 @@
 import React, {FC} from 'react';
 // @ts-ignore
 import Style from './Message.module.css';
+import CheckIcon from '@mui/icons-material/Check';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 type Props = {
     ownerId: number
     myId: number | null
     messageId: number
-    messageText: string
+    text: string
     profileImage: string
     profileName: string
     timeSending: string
@@ -19,7 +21,7 @@ const Message: FC<Props> = (props) => {
         myId,
         ownerId,
         messageId,
-        messageText,
+        text,
         timeSending,
         profileName,
         profileImage,
@@ -43,10 +45,12 @@ const Message: FC<Props> = (props) => {
                 )}
                 <div className={Style.messageContent}>
                     {!isOwn && <div className={Style.profileName}>{profileName}</div>}
-                    <div className={Style.messageText}>{messageText}</div>
+                    <div className={Style.messageText}>{text}</div>
                 </div>
                 {isOwn && (
                     <div className={Style.messageInfo}>
+                        <CheckIcon fontSize={'small'} color={'disabled'} />
+                        {/*<DoneAllIcon fontSize={'small'} color={'primary'} />*/}
                         <div className={Style.messageTime}>{timeSending}</div>
                     </div>
                 )}

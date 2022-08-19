@@ -8,7 +8,7 @@ type MapOwnToProps = {
   ownerId: number
   myId: number | null
   messageId: number
-  messageText: string
+  text: string
   profileImage: string
   profileName: string
   timeSending: string

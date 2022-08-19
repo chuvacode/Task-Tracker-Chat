@@ -3,11 +3,12 @@ import actions from './actions';
 import {Dialog, Message, Profile} from './models';
 import {formatterTime} from '../../utils';
 import {ThunkActionType} from '../store';
-import {MessageSubscriber} from '../../api/chat';
+import {MessageEventSubscriber, NewMessageEventSubscriber} from '../../api/chat';
 
 const operations = {
   getChats: (): ThunkActionType => async (dispatch, getState) => {
     const chatState = getState().chat;
+    const profileState = getState().profile;
     const chats = await api.Chat.getChats();
     const chats_: Dialog[] = chats.items.map((dialog: any): Dialog => {
       return {
@@ -16,21 +17,37 @@ const operations = {
         name: dialog.meta.name,
         description: dialog.meta.description,
         image: dialog.meta.image_url,
-        messages: null,
+        count_unread: dialog.meta.count_unread,
+        messages: dialog.messages.map((message: any) => {
+          return {
+            id: message.id,
+            message: message.message,
+            timeSending: formatterTime(new Date(message.timestamp_sent)),
+            owner_id: message.owner_id,
+            events: message.events,
+          };
+        }),
       };
     });
 
     await dispatch(actions.setDialogs(chats_));
 
     chats_.forEach(chat => {
-      const callback: MessageSubscriber = (...args) => {
+      const callback: NewMessageEventSubscriber = (...args) => {
         if (chat.id === args[0]) {
           dispatch(actions.insertMessage(...args));
+          dispatch(operations.markReadMessage(args[0], [args[2]]));
         }
       };
 
-      api.Chat.subscribe(chat.id, callback);
+      api.Chat.subscribeMessageReceive(chat.id, callback);
     });
+
+    const handlerWasReadMessageEvent:MessageEventSubscriber = (...args) => {
+      dispatch(actions.receivedMessageEvent(...args));
+    };
+
+    api.Chat.subscribeWasReadMessageEvent(handlerWasReadMessageEvent);
   },
   activeDialog: (chat_id: number): ThunkActionType => async (dispatch, state) => {
     const chatState = state().chat;
@@ -52,15 +69,25 @@ const operations = {
 
     api.Chat.getMessages(chat_id)
       .then(messages => {
+        const unread: Array<number> = [];
+
         // Set Messages
         dispatch(actions.setMessages(chat_id, messages.items.map((message: any) => {
+          if (message.events.length === 0 || !message.events.some((event: any) => event.type === 'read')) {
+            unread.push(message.id);
+          }
           return {
             id: message.id,
-            messageText: message.message,
+            message: message.message,
             timeSending: formatterTime(new Date(message.timestamp_sent)),
             owner_id: message.owner_id,
+            events: message.events,
           };
         })));
+
+        // Push event read
+        dispatch(operations.markReadMessage(chat_id, unread));
+        // api.Chat.markRead(unread);
 
         // Chat User IDs
         let user_ids = messages.items.reduce((result: Array<number>, message: Message) => {
@@ -149,9 +176,25 @@ const operations = {
     });
 
   },
-};
+  markReadMessage: (chat_id: number, message_ids: Array<number>): ThunkActionType => (dispatch, getState) => {
+    if (getState().chat.currentDialogID === chat_id) {
+      // Fake read event
+      message_ids.forEach(message_id => {
+        dispatch(actions.receivedMessageEvent(chat_id, message_id, {
+          message_id,
+          user_id: getState().profile.profile.id || -1,
+          id: 0,
+          type: 'read',
+          created_at: '',
+          updated_at: '',
+        }));
+      });
 
-operations.activeDialog(1);
+      // Push event read
+      api.Chat.markRead(message_ids);
+    }
+  },
+};
 
 export default {
   ...operations,

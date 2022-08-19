@@ -32,6 +32,7 @@ beforeEach(() => {
           name: 'Пройти инструктаж по безопасности',
           description: 'Отдел охраны труда',
           image: 'https://picsum.photos/100/100?random=233246',
+          count_unread: 0,
           messages: [],
         },
         {
@@ -40,6 +41,7 @@ beforeEach(() => {
           name: 'Реализация товаров и услуг',
           description: 'Отдел продаж',
           image: 'https://picsum.photos/100/100?random=654321',
+          count_unread: 0,
           messages: [],
         },
         {
@@ -49,6 +51,7 @@ beforeEach(() => {
           description: 'Отдел продаж',
           image: 'https://picsum.photos/100/100?random=23151',
           messages: [],
+          count_unread: 0,
         },
         {
           id: 4,
@@ -57,6 +60,7 @@ beforeEach(() => {
           description: 'Отдел продаж',
           image: 'https://picsum.photos/100/100?random=2332345',
           messages: [],
+          count_unread: 0,
         },
         {
           id: 5,
@@ -65,6 +69,7 @@ beforeEach(() => {
           description: 'Отдел продаж',
           image: 'https://picsum.photos/100/100?random=123141',
           messages: [],
+          count_unread: 0,
         },
       ],
       profiles: [

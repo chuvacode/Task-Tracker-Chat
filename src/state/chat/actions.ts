@@ -1,6 +1,7 @@
 import * as types from './types';
 import {Dialog, Message, Profile} from './models';
 import {InferActionType} from '../store';
+import {ChatTab} from './reducers';
 
 const actions = {
     insertMessage: (chat_id: number, owner_id: number, message_id: number, timeSend: string, message: string) => ({
@@ -53,7 +54,30 @@ const actions = {
     allUnselect: () => ({
         type: types.ALL_UNSELECT,
     } as const),
+    setActiveTab: (tab: ChatTab) => ({
+        type: types.SET_ACTIVE_TAB,
+        payload: {
+            tab: tab,
+        },
+    } as const),
+    receivedMessageEvent: (chat_id: number, message_id: number, event: MessageEvent) => ({
+        type: types.RECEIVED_MESSAGE_EVENT,
+        payload: {
+            chat_id,
+            message_id,
+            event,
+        },
+    } as const),
 };
+
+type MessageEvent = {
+    id: number
+    message_id: number
+    user_id: number
+    type: string
+    created_at: string
+    updated_at: string
+}
 
 export type ActionTypes = InferActionType<typeof actions>;
 
