@@ -32,6 +32,7 @@ const operations = {
 
     await dispatch(actions.setDialogs(chats_));
 
+    // Subscribe on receiving messages
     chats_.forEach(chat => {
       const callback: NewMessageEventSubscriber = (...args) => {
         if (chat.id === args[0]) {
@@ -43,11 +44,17 @@ const operations = {
       api.Chat.subscribeMessageReceive(chat.id, callback);
     });
 
-    const handlerWasReadMessageEvent:MessageEventSubscriber = (...args) => {
+    // Subscribe on reading messages
+    const handlerMessageWasReadEvent:MessageEventSubscriber = (...args) => {
       dispatch(actions.receivedMessageEvent(...args));
     };
+    api.Chat.subscribeMessageWasReadEvent(handlerMessageWasReadEvent);
 
-    api.Chat.subscribeWasReadMessageEvent(handlerWasReadMessageEvent);
+    // Subscribe on deleting messages
+    const handlerMessageWasDeletedEvent:MessageEventSubscriber = (...args) => {
+      dispatch(actions.deletedMessageEvent(...args));
+    };
+    api.Chat.subscribeMessageWasDeletedEvent(handlerMessageWasDeletedEvent);
   },
   activeDialog: (chat_id: number): ThunkActionType => async (dispatch, state) => {
     const chatState = state().chat;
@@ -132,6 +139,7 @@ const operations = {
       dispatch(actions.allUnselect());
       dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, true));
       dispatch(actions.setActiveDialog(chatState.currentDialogID));
+
       api.Chat.getMessages(chatState.currentDialogID)
         .then(messages => {
           if (!chatState.currentDialogID) return;
@@ -140,9 +148,10 @@ const operations = {
           dispatch(actions.setMessages(chatState.currentDialogID, messages.items.map((message: any) => {
             return {
               id: message.id,
-              messageText: message.message,
+              message: message.message,
               timeSending: formatterTime(new Date(message.timestamp_sent)),
               owner_id: message.owner_id,
+              events: message.events,
             };
           })));
 

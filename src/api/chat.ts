@@ -3,13 +3,14 @@ import {WS} from './auth';
 import {Channel} from 'laravel-echo';
 
 export type NewMessageEventSubscriber = (chat_id: number, owner_id: number, message_id: number, timestamp_sent: string,
-                                   message: string) => void
+                                         message: string) => void
 
 export type MessageEventSubscriber = (chat_id: number, message_id: number, event: MessageEvent) => void
 
 const subscribers = {
-  messageReceived: [] as NewMessageEventSubscriber[],
+  messageWasReceived: [] as NewMessageEventSubscriber[],
   messageWasRead: null as MessageEventSubscriber | null,
+  messageWasDeleted: null as MessageEventSubscriber | null,
 };
 
 type ChannelObject = {
@@ -19,14 +20,30 @@ type ChannelObject = {
 
 let channels: Array<ChannelObject> = [];
 
-const handlerNewMessage = () => {
-  // @ts-ignore
-  WS.private(`chat.${chat_id}`)
-    .listen('.new-message-event', (e: any) => {
-      subscribers.messageReceived.forEach(s => {
-        s(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message);
-      });
+const listeningEvents = (channel: Channel) => {
+  // Handler received new message
+  channel.listen('.new-message-event', (e: any) => {
+    subscribers.messageWasReceived.forEach(s => {
+      s(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message);
     });
+  });
+
+  // Handler read message
+  const handlerReadMessageEvent: (event: ReadMessageEvent) => void = ({event, message}) => {
+    if (subscribers.messageWasRead) {
+      subscribers.messageWasRead(message.chat_id, message.id, event);
+    }
+  };
+  channel.listen('.read-message-event', handlerReadMessageEvent);
+
+  // Handler deleted message
+  const handlerMessageWasDeletedEvent: (event: MessageWasDeletedEvent) => void = ({event, message}) => {
+    if (subscribers.messageWasDeleted) {
+      subscribers.messageWasDeleted(message.chat_id, message.id, event);
+    }
+  };
+  channel.listen('.deleted-message-event', handlerMessageWasDeletedEvent);
+
 };
 
 type MessageEvent = {
@@ -53,30 +70,21 @@ type ReadMessageEvent = {
   message: Message
 }
 
-const createChannel = (name: string): ChannelObject => {
+type MessageWasDeletedEvent = {
+  event: MessageEvent
+  message: Message
+}
 
+const createChannel = (name: string) => {
   const channel: ChannelObject = {
     name,
     channel: WS.private(name),
   };
 
-  channel.channel.listen('.new-message-event', (e: any) => {
-    subscribers.messageReceived.forEach(s => {
-      s(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message);
-    });
-  });
-
-  const handlerReadMessageEvent: (event: ReadMessageEvent) => void = ({event, message}) => {
-    if (subscribers.messageWasRead) {
-      subscribers.messageWasRead(message.chat_id, message.id, event);
-    }
-  };
-
-  channel.channel.listen('.read-message-event', handlerReadMessageEvent);
+  // Start listeners
+  listeningEvents(channel.channel);
 
   channels = [...channels, channel];
-
-  return channel;
 };
 
 const findChannel = (name: string): ChannelObject | null => {
@@ -92,7 +100,7 @@ export const Chat = {
     const findResult = findChannel(`chat.${chat_id}`);
     if (findResult === null) {
       createChannel(`chat.${chat_id}`);
-      subscribers.messageReceived = [...subscribers.messageReceived, callback];
+      subscribers.messageWasReceived = [...subscribers.messageWasReceived, callback];
     }
 
     // @ts-ignore
@@ -101,14 +109,21 @@ export const Chat = {
     //     console.log(e);
     //   });
   },
-  subscribeWasReadMessageEvent: (callback: MessageEventSubscriber) => {
+  subscribeMessageWasReadEvent: (callback: MessageEventSubscriber) => {
     if (subscribers.messageWasRead === null) {
       subscribers.messageWasRead = callback;
     }
   },
+  subscribeMessageWasDeletedEvent: (callback: MessageEventSubscriber) => {
+    if (subscribers.messageWasDeleted === null) {
+      subscribers.messageWasDeleted = callback;
+    }
+  },
   getChats: async () => {
     await new Promise(resolve => {
-      setTimeout(() => {resolve(true);}, 500);
+      setTimeout(() => {
+        resolve(true);
+      }, 500);
     });
     return api.get('chat')
       .then(response => response.data)

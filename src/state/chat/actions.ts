@@ -68,6 +68,13 @@ const actions = {
             event,
         },
     } as const),
+    deletedMessageEvent: (chat_id: number, message_id: number, event: MessageEvent) => ({
+        type: types.DELETED_MESSAGE_EVENT,
+        payload: {
+            chat_id,
+            message_id,
+        },
+    } as const),
 };
 
 type MessageEvent = {

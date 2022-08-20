@@ -15,8 +15,11 @@ const withAuthController:(component: ComponentType<ComponentProps<any>>) => Comp
 
     useEffect(() => {
       dispatch(authOperations.getMeProfile());
-      dispatch(authOperations.getToken());
     }, []);
+
+    useEffect(() => {
+      if (isAuth) dispatch(authOperations.getToken());
+    }, [isAuth]);
 
     // Create Echo
     useEffect(() => {

@@ -75,7 +75,8 @@ const ChatManager: FC<RouteComponentProps<{ id?: string | undefined }>> = ({matc
 
           dialog.messages?.forEach(message => {
             if (message.owner_id !== myID) {
-              if (message.events.length === 0) {
+
+              if (message.events?.length === 0) {
                 countUnread++;
               } else if (!message.events.some((event: any) => event.type === 'read' && event.user_id === myID)) {
                 countUnread++;

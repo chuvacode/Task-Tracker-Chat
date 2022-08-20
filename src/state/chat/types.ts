@@ -1,6 +1,7 @@
 export const SET_STATUS_LOADING_CHAT = 'test-tracker-chat/chat/SET_STATUS_LOADING_CHAT';
 export const RECEIVED_MESSAGE_EVENT = 'test-tracker-chat/chat/RECEIVED_MESSAGE_EVENT';
 export const TOGGLE_SELECT_MESSAGE = 'test-tracker-chat/chat/TOGGLE_SELECT_MESSAGE';
+export const DELETED_MESSAGE_EVENT = 'test-tracker-chat/chat/DELETED_MESSAGE_EVENT';
 export const SET_ACTIVE_DIALOG = 'test-tracker-chat/chat/SET_ACTIVE_DIALOG';
 export const ADD_NEW_MESSAGE = 'test-tracker-chat/chat/ADD_NEW_MESSAGE';
 export const INSERT_MESSAGE = 'test-tracker-chat/chat/INSERT_MESSAGE';

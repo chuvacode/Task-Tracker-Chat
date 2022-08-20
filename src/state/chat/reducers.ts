@@ -140,6 +140,19 @@ const reducers = (state = initialState, action: ActionTypes): InitialState => {
           return dialog;
         }),
       };
+    case types.DELETED_MESSAGE_EVENT:
+      return {
+        ...state,
+        dialogs: state.dialogs.map(dialog => {
+          if (dialog.id === action.payload.chat_id && dialog.messages) {
+            return {
+              ...dialog,
+              messages: dialog.messages.filter(message => message.id !== action.payload.message_id),
+            };
+          }
+          return dialog;
+        }),
+      };
     default:
       return state;
   }
