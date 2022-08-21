@@ -1,4 +1,4 @@
-import React, {createRef, FC, InputHTMLAttributes, useEffect} from 'react';
+import React, {createRef, FC, HTMLProps, InputHTMLAttributes, useEffect} from 'react';
 // @ts-ignore
 import Style from './TextArea.module.css';
 import {setEndOfContenteditable} from '../../../../../utils';
@@ -15,7 +15,7 @@ type Props = MapDispatchToProps;
 
 const isBR = (element: any): boolean => !!element && element.tagName === 'BR';
 
-const TextArea: FC<WrappedFieldProps & Props & InputHTMLAttributes<HTMLInputElement>> = ({input, meta, change, ...props}) => {
+const TextArea: FC<WrappedFieldProps & Props & HTMLProps<HTMLInputElement>> = ({input, meta, change, ...props}) => {
     const refSubmit: React.RefObject<HTMLInputElement> = createRef();
     const refTextarea: React.RefObject<HTMLDivElement> = createRef();
 

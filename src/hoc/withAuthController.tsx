@@ -14,12 +14,14 @@ const withAuthController:(component: ComponentType<ComponentProps<any>>) => Comp
     const pathname = history.location.pathname;
 
     useEffect(() => {
-      dispatch(authOperations.getMeProfile());
-    }, []);
+      if (!isInitialized) {
+        dispatch(authOperations.getMeProfile());
+      }
+    }, [isInitialized]);
 
     useEffect(() => {
-      if (isAuth) dispatch(authOperations.getToken());
-    }, [isAuth]);
+      if (isAuth && !token) dispatch(authOperations.getToken());
+    }, [isAuth, token]);
 
     // Create Echo
     useEffect(() => {
@@ -30,10 +32,10 @@ const withAuthController:(component: ComponentType<ComponentProps<any>>) => Comp
 
     if (isInitialized) {
       if (pathname !== '/login' && !isAuth) {
-        history.push('/login');
+        return <Redirect to={'/login'} />;
       }
       if (pathname === '/login' && isAuth) {
-        history.push('/chat');
+        return <Redirect to={'/chat'} />;
       }
       return <Component/>;
     } else {

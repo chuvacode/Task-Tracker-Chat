@@ -17,7 +17,6 @@ const authorizeChannel = (token: string) => (channel: any, options: any) => {
         },
       })
         .then((response) => {
-          console.log();
           callback(false, response.data);
         })
         .catch((error) => {

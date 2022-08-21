@@ -2,49 +2,10 @@ import {api} from './index';
 import {WS} from './auth';
 import {Channel} from 'laravel-echo';
 
-export type NewMessageEventSubscriber = (chat_id: number, owner_id: number, message_id: number, timestamp_sent: string,
-                                         message: string) => void
-
-export type MessageEventSubscriber = (chat_id: number, message_id: number, event: MessageEvent) => void
-
-const subscribers = {
-  messageWasReceived: [] as NewMessageEventSubscriber[],
-  messageWasRead: null as MessageEventSubscriber | null,
-  messageWasDeleted: null as MessageEventSubscriber | null,
-};
-
 type ChannelObject = {
   name: string
   channel: Channel
 }
-
-let channels: Array<ChannelObject> = [];
-
-const listeningEvents = (channel: Channel) => {
-  // Handler received new message
-  channel.listen('.new-message-event', (e: any) => {
-    subscribers.messageWasReceived.forEach(s => {
-      s(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message);
-    });
-  });
-
-  // Handler read message
-  const handlerReadMessageEvent: (event: ReadMessageEvent) => void = ({event, message}) => {
-    if (subscribers.messageWasRead) {
-      subscribers.messageWasRead(message.chat_id, message.id, event);
-    }
-  };
-  channel.listen('.read-message-event', handlerReadMessageEvent);
-
-  // Handler deleted message
-  const handlerMessageWasDeletedEvent: (event: MessageWasDeletedEvent) => void = ({event, message}) => {
-    if (subscribers.messageWasDeleted) {
-      subscribers.messageWasDeleted(message.chat_id, message.id, event);
-    }
-  };
-  channel.listen('.deleted-message-event', handlerMessageWasDeletedEvent);
-
-};
 
 type MessageEvent = {
   id: number
@@ -74,6 +35,45 @@ type MessageWasDeletedEvent = {
   event: MessageEvent
   message: Message
 }
+
+export type NewMessageEventSubscriber = (chat_id: number, owner_id: number, message_id: number, timestamp_sent: string,
+                                         message: string) => void
+
+export type MessageEventSubscriber = (chat_id: number, message_id: number, event: MessageEvent) => void
+
+const subscribers = {
+  messageWasReceived: [] as NewMessageEventSubscriber[],
+  messageWasRead: null as MessageEventSubscriber | null,
+  messageWasDeleted: null as MessageEventSubscriber | null,
+};
+
+let channels: Array<ChannelObject> = [];
+
+const listeningEvents = (channel: Channel) => {
+  // Handler received new message
+  channel.listen('.new-message-event', (e: any) => {
+    subscribers.messageWasReceived.forEach(s => {
+      s(e.message.chat_id, e.message.owner_id, e.message.id, e.message.timestamp_sent, e.message.message);
+    });
+  });
+
+  // Handler read message
+  const handlerReadMessageEvent: (event: ReadMessageEvent) => void = ({event, message}) => {
+    if (subscribers.messageWasRead) {
+      subscribers.messageWasRead(message.chat_id, message.id, event);
+    }
+  };
+  channel.listen('.read-message-event', handlerReadMessageEvent);
+
+  // Handler deleted message
+  const handlerMessageWasDeletedEvent: (event: MessageWasDeletedEvent) => void = ({event, message}) => {
+    if (subscribers.messageWasDeleted) {
+      subscribers.messageWasDeleted(message.chat_id, message.id, event);
+    }
+  };
+  channel.listen('.deleted-message-event', handlerMessageWasDeletedEvent);
+
+};
 
 const createChannel = (name: string) => {
   const channel: ChannelObject = {
@@ -152,7 +152,6 @@ export const Chat = {
       .then(response => response.data);
   },
   markRead: (message_ids: Array<number>) => {
-    console.log('DD');
     return api.put('message?act=mark_read', {ids: message_ids})
       .then(response => response.data);
   },
