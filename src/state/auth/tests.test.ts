@@ -96,7 +96,7 @@ beforeEach(() => {
       ],
       activeTab: 'group',
       currentDialogID: 1,
-      countNewMessages: 1,
+      countUnread: 1,
       isLoadingChatIds: [],
       selectedMessageIds: [],
     },

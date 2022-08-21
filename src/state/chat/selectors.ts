@@ -9,9 +9,6 @@ const getCurrentChat = (state: RootState) => {
 };
 
 const selectors = {
-    getCountNewMessage: (state: RootState) => {
-        return state.chat.countNewMessages;
-    },
     getCurrentChat: (state: RootState) => {
         return getCurrentChat(state);
     },
@@ -38,6 +35,9 @@ const selectors = {
     },
     getDialogs: (state: RootState) => {
         return state.chat.dialogs;
+    },
+    getCountUnread: (state: RootState) => {
+        return state.chat.countUnread;
     },
 };
 

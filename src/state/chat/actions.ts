@@ -60,7 +60,7 @@ const actions = {
             tab: tab,
         },
     } as const),
-    receivedMessageEvent: (chat_id: number, message_id: number, event: MessageEvent) => ({
+    receivedMessageEvent: (chat_id: number, message_id: number, message_owner_id: number, event: MessageEvent) => ({
         type: types.RECEIVED_MESSAGE_EVENT,
         payload: {
             chat_id,
@@ -68,11 +68,17 @@ const actions = {
             event,
         },
     } as const),
-    deletedMessageEvent: (chat_id: number, message_id: number, event: MessageEvent) => ({
+    deletedMessageEvent: (chat_id: number, message_id: number, message_owner_id: number, event: MessageEvent) => ({
         type: types.DELETED_MESSAGE_EVENT,
         payload: {
             chat_id,
             message_id,
+        },
+    } as const),
+    setCountUnread: (countUnread: number) => ({
+        type: types.SET_COUNT_UNREAD,
+        payload: {
+            countUnread,
         },
     } as const),
 };

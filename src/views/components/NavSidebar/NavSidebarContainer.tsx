@@ -3,15 +3,7 @@ import NavSidebar from './NavSidebar';
 import {chatSelectors} from '../../../state/chat';
 import {RootState} from '../../../state/store';
 
-type MapStateToProps = {
-    countNewMessages: number
-}
-
-const mapStateToProps = (state: RootState): MapStateToProps => ({
-    countNewMessages: chatSelectors.getCountNewMessage(state),
-});
-
-const NavSidebarContainer = connect(mapStateToProps)(NavSidebar);
+const NavSidebarContainer = connect()(NavSidebar);
 
 export default NavSidebarContainer;
 

@@ -39,7 +39,7 @@ type MessageWasDeletedEvent = {
 export type NewMessageEventSubscriber = (chat_id: number, owner_id: number, message_id: number, timestamp_sent: string,
                                          message: string) => void
 
-export type MessageEventSubscriber = (chat_id: number, message_id: number, event: MessageEvent) => void
+export type MessageEventSubscriber = (chat_id: number, message_id: number, message_owner_id: number, event: MessageEvent) => void
 
 const subscribers = {
   messageWasReceived: [] as NewMessageEventSubscriber[],
@@ -60,7 +60,7 @@ const listeningEvents = (channel: Channel) => {
   // Handler read message
   const handlerReadMessageEvent: (event: ReadMessageEvent) => void = ({event, message}) => {
     if (subscribers.messageWasRead) {
-      subscribers.messageWasRead(message.chat_id, message.id, event);
+      subscribers.messageWasRead(message.chat_id, message.id, message.owner_id, event);
     }
   };
   channel.listen('.read-message-event', handlerReadMessageEvent);
@@ -68,7 +68,7 @@ const listeningEvents = (channel: Channel) => {
   // Handler deleted message
   const handlerMessageWasDeletedEvent: (event: MessageWasDeletedEvent) => void = ({event, message}) => {
     if (subscribers.messageWasDeleted) {
-      subscribers.messageWasDeleted(message.chat_id, message.id, event);
+      subscribers.messageWasDeleted(message.chat_id, message.id, message.owner_id, event);
     }
   };
   channel.listen('.deleted-message-event', handlerMessageWasDeletedEvent);

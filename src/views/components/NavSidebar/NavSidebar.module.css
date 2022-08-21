@@ -26,14 +26,16 @@
 }
 
 .counter {
-    padding: 5px 8px;
+    padding: 3px 5px;
     border-radius: 50px;
     margin-left: auto;
     background: rgba(49, 126, 246, 1);
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 12px;
     line-height: 100%;
     letter-spacing: 0.02em;
     color: #FFFFFF;
+    min-width: 18px;
+    text-align: center;
 }

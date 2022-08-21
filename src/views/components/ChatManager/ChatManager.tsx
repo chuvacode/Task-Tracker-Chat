@@ -36,8 +36,10 @@ const ChatManager: FC<RouteComponentProps<{ id?: string | undefined }>> = ({matc
   };
 
   useEffect(() => {
-    getChats();
-  }, []);
+    if (dialogs.length === 0) {
+      getChats();
+    }
+  }, [dialogs]);
 
   useEffect(() => {
     if (match.params.id) {

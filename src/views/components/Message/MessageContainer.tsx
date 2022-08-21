@@ -12,6 +12,7 @@ type MapOwnToProps = {
   profileImage: string
   profileName: string
   timeSending: string
+  isRead: boolean
 }
 
 type MapStateToProps = {

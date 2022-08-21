@@ -11,7 +11,7 @@ const initialState = {
   profiles: [] as Array<Profile>,
   activeTab: 'group' as ChatTab,
   currentDialogID: null as number | null,
-  countNewMessages: 1 as number,
+  countUnread: 0,
   isLoadingChatIds: [] as Array<number>,
   selectedMessageIds: [] as Array<number>,
 };
@@ -152,6 +152,11 @@ const reducers = (state = initialState, action: ActionTypes): InitialState => {
           }
           return dialog;
         }),
+      };
+    case types.SET_COUNT_UNREAD:
+      return {
+        ...state,
+        countUnread: action.payload.countUnread,
       };
     default:
       return state;

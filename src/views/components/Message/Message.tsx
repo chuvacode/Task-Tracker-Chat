@@ -14,6 +14,7 @@ type Props = {
     timeSending: string
     toggleSelectMessage: (id: number) => void
     selectedMessageIds: Array<number>
+    isRead: boolean
 }
 
 const Message: FC<Props> = (props) => {
@@ -27,10 +28,13 @@ const Message: FC<Props> = (props) => {
         profileImage,
         toggleSelectMessage,
         selectedMessageIds,
+        isRead,
     } = props;
 
     const isOwn = ownerId === myId;
     const isSelected = selectedMessageIds.some(id => messageId === id);
+
+
 
     return (
         <div className={`${Style.messageContainer} ${isSelected ? Style.selected : ''}`}>
@@ -49,7 +53,7 @@ const Message: FC<Props> = (props) => {
                 </div>
                 {isOwn && (
                     <div className={Style.messageInfo}>
-                        <CheckIcon fontSize={'small'} color={'disabled'} />
+                        <CheckIcon fontSize={'small'} color={(isRead ? 'primary' : 'disabled')} />
                         {/*<DoneAllIcon fontSize={'small'} color={'primary'} />*/}
                         <div className={Style.messageTime}>{timeSending}</div>
                     </div>

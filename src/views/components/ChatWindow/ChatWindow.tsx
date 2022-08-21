@@ -29,7 +29,7 @@ const ChatWindow: FC<Props> = ({dialog, profiles, isLoadingChatIDs, currentProfi
   return (
     <div className={Style.chatWindow}>
       {dialog && <>
-        <ChatHeaderContainer />
+        <ChatHeaderContainer/>
         <div className={Style.messenger} ref={refDialog}>
 
           {isDone() && dialog.messages && dialog.messages.map(message => {
@@ -39,6 +39,12 @@ const ChatWindow: FC<Props> = ({dialog, profiles, isLoadingChatIDs, currentProfi
               }
             }))[0];
 
+            const someUserRead = message.events.some(event => {
+              return (event.type === 'read' && event.user_id !== currentProfileID);
+            });
+
+            const isRead = message.events !== [] && someUserRead;
+
             return <MessageContainer key={message.id}
                                      messageId={message.id}
                                      timeSending={message.timeSending}
@@ -46,6 +52,7 @@ const ChatWindow: FC<Props> = ({dialog, profiles, isLoadingChatIDs, currentProfi
                                      profileImage={profile.image}
                                      profileName={profile.name}
                                      ownerId={profile.id}
+                                     isRead={isRead}
                                      myId={currentProfileID}/>;
           })}
 

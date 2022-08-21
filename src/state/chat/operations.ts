@@ -4,6 +4,8 @@ import {Dialog, Message, Profile} from './models';
 import {formatterTime} from '../../utils';
 import {ThunkActionType} from '../store';
 import {MessageEventSubscriber, NewMessageEventSubscriber} from '../../api/chat';
+import {chatActions, chatSelectors} from './index';
+import {authSelectors} from '../auth';
 
 const operations = {
   getChats: (): ThunkActionType => async (dispatch, getState) => {
@@ -30,6 +32,18 @@ const operations = {
       };
     });
 
+    chats.items.forEach((chat: any) => {
+      dispatch(actions.setStatusLoadingChat(chat.id, true));
+      dispatch(actions.addProfiles(chat.members.map((profile: any): Profile => {
+        return {
+          id: profile.id,
+          name: `${profile.first_name}  ${profile.last_name}`,
+          image: profile.avatar_url,
+        };
+      })));
+      dispatch(actions.setStatusLoadingChat(chat.id, false));
+    });
+
     await dispatch(actions.setDialogs(chats_));
 
     // Subscribe on receiving messages
@@ -37,10 +51,11 @@ const operations = {
       const callback: NewMessageEventSubscriber = (...args) => {
         if (chat.id === args[0]) {
           dispatch(actions.insertMessage(...args));
-          dispatch(operations.markReadMessage(args[0], [args[2]]));
+          if (args[1] !== profileState.profile.id) {
+            dispatch(operations.markReadMessage(args[0], [args[2]]));
+          }
         }
       };
-
       api.Chat.subscribeMessageReceive(chat.id, callback);
     });
 
@@ -52,22 +67,29 @@ const operations = {
 
     // Subscribe on deleting messages
     const handlerMessageWasDeletedEvent:MessageEventSubscriber = (...args) => {
-      dispatch(actions.deletedMessageEvent(...args));
+      const owner_id = args[2];
+      const event = args[3];
+
+      if (event.user_id === owner_id || event.user_id === profileState.profile.id) {
+        dispatch(actions.deletedMessageEvent(...args));
+      }
+
     };
     api.Chat.subscribeMessageWasDeletedEvent(handlerMessageWasDeletedEvent);
   },
   activeDialog: (chat_id: number): ThunkActionType => async (dispatch, state) => {
     const chatState = state().chat;
+    const profileState = state().profile;
 
     window.history.pushState(null, '', `/chat/${chat_id}`);
 
+    // Exit because for some reason there are no chat
     if (chatState.dialogs.length === 0) return;
 
+    // Exit because it current chat
     if (chatState.currentDialogID === chat_id) {
       const currentDialog = chatState.dialogs.find(chat => chat.id === chat_id);
-      if (currentDialog && currentDialog.messages !== null) {
-        return;
-      }
+      if (currentDialog && currentDialog.messages !== null) return;
     }
 
     dispatch(actions.allUnselect());
@@ -80,7 +102,8 @@ const operations = {
 
         // Set Messages
         dispatch(actions.setMessages(chat_id, messages.items.map((message: any) => {
-          if (message.events.length === 0 || !message.events.some((event: any) => event.type === 'read')) {
+          if (message.events.length === 0 || !message.events.some((event: any) => event.type === 'read'
+              && event.user_id === profileState.profile.id)) {
             unread.push(message.id);
           }
           return {
@@ -93,8 +116,9 @@ const operations = {
         })));
 
         // Push event read
-        dispatch(operations.markReadMessage(chat_id, unread));
-        // api.Chat.markRead(unread);
+        if (unread.length > 0) {
+          dispatch(operations.markReadMessage(chat_id, unread));
+        }
 
         // Chat User IDs
         let user_ids = messages.items.reduce((result: Array<number>, message: Message) => {
@@ -109,18 +133,20 @@ const operations = {
           return dispatch(actions.setStatusLoadingChat(chat_id, false));
         }
 
+        dispatch(actions.setStatusLoadingChat(chat_id, false));
+
         // Get Profiles
-        api.User.getProfiles(user_ids)
-          .then(profiles => {
-            dispatch(actions.addProfiles(profiles.items.map((profile: any): Profile => {
-              return {
-                id: profile.id,
-                name: `${profile.first_name}  ${profile.last_name}`,
-                image: profile.avatar_url,
-              };
-            })));
-            dispatch(actions.setStatusLoadingChat(chat_id, false));
-          });
+        // api.User.getProfiles(user_ids)
+        //   .then(profiles => {
+        //     dispatch(actions.addProfiles(profiles.items.map((profile: any): Profile => {
+        //       return {
+        //         id: profile.id,
+        //         name: `${profile.first_name}  ${profile.last_name}`,
+        //         image: profile.avatar_url,
+        //       };
+        //     })));
+        //     dispatch(actions.setStatusLoadingChat(chat_id, false));
+        //   });
       });
 
   },
@@ -169,18 +195,18 @@ const operations = {
           }
 
           // Get Profiles
-          api.User.getProfiles(user_ids)
-            .then(profiles => {
-              if (!chatState.currentDialogID) return;
-              dispatch(actions.addProfiles(profiles.items.map((profile: any) => {
-                return {
-                  id: profile.id,
-                  name: `${profile.first_name}  ${profile.last_name}`,
-                  image: profile.avatar_url,
-                };
-              })));
-              dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, false));
-            });
+          // api.User.getProfiles(user_ids)
+          //   .then(profiles => {
+          //     if (!chatState.currentDialogID) return;
+          //     dispatch(actions.addProfiles(profiles.items.map((profile: any) => {
+          //       return {
+          //         id: profile.id,
+          //         name: `${profile.first_name}  ${profile.last_name}`,
+          //         image: profile.avatar_url,
+          //       };
+          //     })));
+          //     dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, false));
+          //   });
         });
     });
 
@@ -189,7 +215,7 @@ const operations = {
     if (getState().chat.currentDialogID === chat_id) {
       // Fake read event
       message_ids.forEach(message_id => {
-        dispatch(actions.receivedMessageEvent(chat_id, message_id, {
+        dispatch(actions.receivedMessageEvent(chat_id, message_id, -1, {
           message_id,
           user_id: getState().profile.profile.id || -1,
           id: 0,
@@ -202,6 +228,25 @@ const operations = {
       // Push event read
       api.Chat.markRead(message_ids);
     }
+  },
+  calculateCountUnread: (): ThunkActionType => (dispatch, getState) => {
+    const currentProfileID = authSelectors.getProfileID(getState());
+    const dialogs = chatSelectors.getDialogs(getState());
+    let counter = 0;
+
+    dialogs.forEach(dialog => {
+      dialog.messages.forEach(message => {
+        if (message.owner_id !== currentProfileID) {
+          if (message.events.length === 0 ||
+            !message.events.some((event: any) => event.type === 'read' && event.user_id === currentProfileID))
+          {
+            counter++;
+          }
+        }
+      });
+    });
+
+    dispatch(chatActions.setCountUnread(counter));
   },
 };
 
