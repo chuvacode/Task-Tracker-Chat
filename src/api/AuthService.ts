@@ -1,6 +1,6 @@
 import {api} from './index';
 import Echo from 'laravel-echo';
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
 const authorizeChannel = (token: string) => (channel: any, options: any) => {
   return {
@@ -27,7 +27,17 @@ const authorizeChannel = (token: string) => (channel: any, options: any) => {
 };
 export let WS: Echo;
 
-export const Auth = {
+
+type FetchProfile = {
+  id: number
+  username: string
+  first_name: string
+  last_name: string
+  email: string
+  avatar_url: string
+}
+
+export const AuthService = {
   login: (username: string, password: string) => {
     return api.post('login', {
       username,
@@ -41,11 +51,9 @@ export const Auth = {
     return api.get('csrf-cookie').then(response => true);
   },
   getMe: () => {
-    return api.get('get-me')
-      .then(response => response.data)
-      .catch(reason => {
-        throw reason.response;
-      });
+    return api.get<FetchProfile>('get-me')
+      .then(response => response.data);
+      // .catch(reason => new Error('123'));
   },
   getToken: () => {
     return api.post('sanctum/token')

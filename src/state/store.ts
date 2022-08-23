@@ -13,9 +13,7 @@ export const rootReducer = combineReducers({
   form: formReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>
-
-type ActionTypes = chatActionTypes | authActionTypes;
+export type ActionTypes = chatActionTypes | authActionTypes;
 
 export type ThunkActionType = ThunkAction<Promise<any> | void, RootState, unknown, ActionTypes>;
 
@@ -30,6 +28,7 @@ const middleware = composeEnhancers(applyMiddleware(thunkMiddleware));
 
 const store = createStore(rootReducer, middleware);
 
-export type DispatchWithThunk = typeof store.dispatch;
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof rootReducer>
 
 export default store;

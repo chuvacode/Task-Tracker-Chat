@@ -1,21 +1,19 @@
 import React, {FC, useEffect, useState} from 'react';
 // @ts-ignore
 import Style from './ChatsManager.module.css';
-import {NavLink, RouteComponentProps} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import {chatActions, chatOperations, chatSelectors} from '../../../state/chat';
-import {DispatchWithThunk} from '../../../state/store';
-import {ChatTab} from '../../../state/chat/reducers';
+import {NavLink, useHistory, useParams} from 'react-router-dom';
+import {chatSelectors} from '../../../state/chat';
 import classNames from 'classnames';
 import {authSelectors} from '../../../state/auth';
+import {useAppSelector} from '../../../hooks/useAppSelector';
+import {useActions} from '../../../hooks/useActions';
 
-const ChatManager: FC<RouteComponentProps<{ id?: string | undefined }>> = ({match}) => {
+const ChatManager: FC = () => {
   const [term, setTerm] = useState('');
-  const dispatch: DispatchWithThunk = useDispatch();
-  const activeTab = useSelector(chatSelectors.getActiveTab);
-  const currentDialogID = useSelector(chatSelectors.getCurrentDialogID);
-  const dialogs = useSelector(chatSelectors.getDialogs);
-  const myID = useSelector(authSelectors.getProfileID);
+  const activeTab = useAppSelector(chatSelectors.getActiveTab);
+  const currentDialogID = useAppSelector(chatSelectors.getCurrentDialogID);
+  const dialogs = useAppSelector(chatSelectors.getDialogs);
+  const myID = useAppSelector(authSelectors.getProfileID);
 
   let filteredDialog = dialogs.filter(dialog => dialog.type === activeTab);
 
@@ -25,15 +23,12 @@ const ChatManager: FC<RouteComponentProps<{ id?: string | undefined }>> = ({matc
     });
   }
 
-  const setActiveTab = (tab: ChatTab) => {
-    dispatch(chatActions.setActiveTab(tab));
-  };
-  const activeDialog = (chat_id: number) => {
-    dispatch(chatOperations.activeDialog(chat_id));
-  };
-  const getChats = () => {
-    dispatch(chatOperations.getChats());
-  };
+  const {setActiveTab} = useActions();
+  const {getChats, activeDialog} = useActions();
+
+  const history = useHistory();
+  const params = useParams<{id: string}>();
+
 
   useEffect(() => {
     if (dialogs.length === 0) {
@@ -41,14 +36,15 @@ const ChatManager: FC<RouteComponentProps<{ id?: string | undefined }>> = ({matc
     }
   }, [dialogs]);
 
+  // Initialize chat
   useEffect(() => {
-    if (match.params.id) {
-      activeDialog(+match.params.id);
+    if (params.id) {
+      activeDialog(+params.id);
     } else if (currentDialogID) {
       activeDialog(currentDialogID);
+      history.push(`/chat/${currentDialogID}`);
     }
-  }, [dialogs]);
-
+  }, [dialogs, params]);
 
   const handlerTabContacts = () => {
     setActiveTab('contact');

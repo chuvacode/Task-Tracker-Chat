@@ -1,16 +1,18 @@
 import React, {FC, useEffect} from 'react';
 // @ts-ignore
 import Style from './NavSidebar.module.css';
-import {NavLink} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
+import {matchPath, NavLink} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 import {chatOperations, chatSelectors} from '../../../state/chat';
-import {DispatchWithThunk} from '../../../state/store';
+import {AppDispatch} from '../../../state/store';
+import {useAppSelector} from '../../../hooks/useAppSelector';
+import {RouteNames} from '../../../router';
 
 const NavSidebar: FC = () => {
 
-  const dispatch: DispatchWithThunk = useDispatch();
-  const countUnread = useSelector(chatSelectors.getCountUnread);
-  const dialogs = useSelector(chatSelectors.getDialogs);
+  const dispatch: AppDispatch = useDispatch();
+  const countUnread = useAppSelector(chatSelectors.getCountUnread);
+  const dialogs = useAppSelector(chatSelectors.getDialogs);
 
   useEffect(() => {
     dispatch(chatOperations.calculateCountUnread());
@@ -18,7 +20,7 @@ const NavSidebar: FC = () => {
 
   return (
     <div className={Style.nav}>
-      <NavLink className={Style.link + ' ' + Style.linkActive} to="/chat">
+      <NavLink className={Style.link + ' ' + Style.linkActive} to={'/chat'}>
         Сообщения
         {countUnread > 0 ? <span className={Style.counter}>{countUnread}</span> : ''}
       </NavLink>

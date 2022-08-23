@@ -1,5 +1,5 @@
 import {api} from './index';
-import {WS} from './auth';
+import {WS} from './AuthService';
 import {Channel} from 'laravel-echo';
 
 type ChannelObject = {
@@ -94,7 +94,7 @@ const findChannel = (name: string): ChannelObject | null => {
   return result[0];
 };
 
-export const Chat = {
+export const ChatService = {
   subscribeMessageReceive: (chat_id: number, callback: NewMessageEventSubscriber) => {
     // if channel not found, then create
     const findResult = findChannel(`chat.${chat_id}`);

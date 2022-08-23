@@ -1,9 +1,8 @@
-import * as api from '../../api';
 import actions from './actions';
 import {Dialog, Message, Profile} from './models';
 import {formatterTime} from '../../utils';
 import {ThunkActionType} from '../store';
-import {MessageEventSubscriber, NewMessageEventSubscriber} from '../../api/chat';
+import {ChatService, MessageEventSubscriber, NewMessageEventSubscriber} from '../../api/ChatService';
 import {chatActions, chatSelectors} from './index';
 import {authSelectors} from '../auth';
 
@@ -11,7 +10,7 @@ const operations = {
   getChats: (): ThunkActionType => async (dispatch, getState) => {
     const chatState = getState().chat;
     const profileState = getState().profile;
-    const chats = await api.Chat.getChats();
+    const chats = await ChatService.getChats();
     const chats_: Dialog[] = chats.items.map((dialog: any): Dialog => {
       return {
         id: dialog.id,
@@ -56,14 +55,14 @@ const operations = {
           }
         }
       };
-      api.Chat.subscribeMessageReceive(chat.id, callback);
+      ChatService.subscribeMessageReceive(chat.id, callback);
     });
 
     // Subscribe on reading messages
     const handlerMessageWasReadEvent:MessageEventSubscriber = (...args) => {
       dispatch(actions.receivedMessageEvent(...args));
     };
-    api.Chat.subscribeMessageWasReadEvent(handlerMessageWasReadEvent);
+    ChatService.subscribeMessageWasReadEvent(handlerMessageWasReadEvent);
 
     // Subscribe on deleting messages
     const handlerMessageWasDeletedEvent:MessageEventSubscriber = (...args) => {
@@ -75,13 +74,11 @@ const operations = {
       }
 
     };
-    api.Chat.subscribeMessageWasDeletedEvent(handlerMessageWasDeletedEvent);
+    ChatService.subscribeMessageWasDeletedEvent(handlerMessageWasDeletedEvent);
   },
-  activeDialog: (chat_id: number): ThunkActionType => async (dispatch, state) => {
-    const chatState = state().chat;
-    const profileState = state().profile;
-
-    window.history.pushState(null, '', `/chat/${chat_id}`);
+  activeDialog: (chat_id: number): ThunkActionType => async (dispatch, getState) => {
+    const chatState = getState().chat;
+    const profileState = getState().profile;
 
     // Exit because for some reason there are no chat
     if (chatState.dialogs.length === 0) return;
@@ -96,7 +93,7 @@ const operations = {
     dispatch(actions.setStatusLoadingChat(chat_id, true));
     await dispatch(actions.setActiveDialog(chat_id));
 
-    api.Chat.getMessages(chat_id)
+    ChatService.getMessages(chat_id)
       .then(messages => {
         const unread: Array<number> = [];
 
@@ -127,7 +124,7 @@ const operations = {
 
         // Missing User IDs
         user_ids = user_ids.filter((id: number) =>
-          !(state().chat.profiles.some((profile: Profile) => profile.id === id)));
+          !(getState().chat.profiles.some((profile: Profile) => profile.id === id)));
 
         if (user_ids.length === 0) {
           return dispatch(actions.setStatusLoadingChat(chat_id, false));
@@ -154,19 +151,19 @@ const operations = {
     const chatState = state().chat;
     if (!message || message.trim() === '') return;
     if (!chatState.currentDialogID) return;
-    api.Chat.sendMessage(chatState.currentDialogID, message, Date.now());
+    ChatService.sendMessage(chatState.currentDialogID, message, Date.now());
   },
   deleteMessages: (): ThunkActionType => (dispatch, state) => {
     const chatState = state().chat;
     const message_ids = chatState.selectedMessageIds;
 
-    api.Chat.deleteMessages(message_ids).then(status => {
+    ChatService.deleteMessages(message_ids).then(status => {
       if (!chatState.currentDialogID) return;
       dispatch(actions.allUnselect());
       dispatch(actions.setStatusLoadingChat(chatState.currentDialogID, true));
       dispatch(actions.setActiveDialog(chatState.currentDialogID));
 
-      api.Chat.getMessages(chatState.currentDialogID)
+      ChatService.getMessages(chatState.currentDialogID)
         .then(messages => {
           if (!chatState.currentDialogID) return;
 
@@ -226,7 +223,7 @@ const operations = {
       });
 
       // Push event read
-      api.Chat.markRead(message_ids);
+      ChatService.markRead(message_ids);
     }
   },
   calculateCountUnread: (): ThunkActionType => (dispatch, getState) => {

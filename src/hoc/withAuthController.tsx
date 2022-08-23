@@ -1,16 +1,17 @@
 import React, {ComponentProps, ComponentType, FC, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {Redirect, useHistory} from 'react-router-dom';
 import {authOperations, authSelectors} from '../state/auth';
-import {DispatchWithThunk} from '../state/store';
+import {AppDispatch} from '../state/store';
+import {useAppSelector} from '../hooks/useAppSelector';
 
 const withAuthController:(component: ComponentType<ComponentProps<any>>) => ComponentType = (Component) => {
   const RedirectComponent: FC = () => {
     const history = useHistory();
-    const dispatch: DispatchWithThunk = useDispatch();
-    const isAuth = useSelector(authSelectors.getAuthStatus);
-    const isInitialized = useSelector(authSelectors.getInitializeStatus);
-    const token = useSelector(authSelectors.getToken);
+    const dispatch: AppDispatch = useDispatch();
+    const isAuth = useAppSelector(authSelectors.getAuthStatus);
+    const isInitialized = useAppSelector(authSelectors.getInitializeStatus);
+    const token = useAppSelector(authSelectors.getToken);
     const pathname = history.location.pathname;
 
     useEffect(() => {
@@ -28,14 +29,14 @@ const withAuthController:(component: ComponentType<ComponentProps<any>>) => Comp
       if (token !== null) {
         dispatch(authOperations.createEcho());
       }
-    }, [token])
+    }, [token]);
 
     if (isInitialized) {
       if (pathname !== '/login' && !isAuth) {
-        return <Redirect to={'/login'} />;
+        history.replace('/login');
       }
       if (pathname === '/login' && isAuth) {
-        return <Redirect to={'/chat'} />;
+        history.replace('/chat');
       }
       return <Component/>;
     } else {

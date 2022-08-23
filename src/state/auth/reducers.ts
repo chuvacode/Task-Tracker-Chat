@@ -8,10 +8,11 @@ const initialState = {
     token: null as string | null,
     profile: {
         id: null,
-        name: null,
-        image: null,
         email: null,
         username: null,
+        first_name: null,
+        last_name: null,
+        avatar_url: null,
     } as Profile,
 };
 
@@ -32,8 +33,9 @@ const reducers = (state = initialState, action: ActionTypes): InitialStateType =
                 isAuth: false,
                 profile: {
                     id: null,
-                    name: null,
-                    image: null,
+                    first_name: null,
+                    last_name: null,
+                    avatar_url: null,
                     email: null,
                     username: null,
                 },

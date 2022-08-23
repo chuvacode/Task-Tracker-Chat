@@ -7,15 +7,29 @@
 }
 
 .form {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 400px;
-    /*height: 400px;*/
     background: linear-gradient(180deg, rgba(231, 231, 249, 1) 0%, rgba(231, 231, 249, 1) 37.35%);
     background: #FAF9FC;
     box-shadow: inset 0px 0px 100px rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(24px);
     padding: 20px;
+    border-radius: 7px;
+}
+
+.formLoader {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    left: 0;
+    top: 0;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(3px);
     border-radius: 7px;
 }
 

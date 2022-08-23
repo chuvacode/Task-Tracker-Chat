@@ -2,15 +2,16 @@
 import Style from './ChatHeader.module.css';
 import React, {FC} from 'react';
 import {declination} from '../../../utils';
-import {useDispatch, useSelector} from 'react-redux';
-import {DispatchWithThunk} from '../../../state/store';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../state/store';
 import {chatActions, chatOperations, chatSelectors} from '../../../state/chat';
+import {useAppSelector} from '../../../hooks/useAppSelector';
 
 const ChatHeader: FC = () => {
-  const dispatch: DispatchWithThunk = useDispatch();
-  const name = useSelector(chatSelectors.getNameCurrentChat);
-  const description = useSelector(chatSelectors.getDescriptionCurrentChat);
-  const selectedMessageIDs = useSelector(chatSelectors.getSelectedMessageIDs);
+  const dispatch: AppDispatch = useDispatch();
+  const name = useAppSelector(chatSelectors.getNameCurrentChat);
+  const description = useAppSelector(chatSelectors.getDescriptionCurrentChat);
+  const selectedMessageIDs = useAppSelector(chatSelectors.getSelectedMessageIDs);
   const handlerUnselect = () => {
     dispatch(chatActions.allUnselect());
   };
