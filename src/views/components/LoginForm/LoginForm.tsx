@@ -7,6 +7,7 @@ import {Form, Formik, useFormikContext} from 'formik';
 import {useActions} from '../../../hooks/useActions';
 import classNames from 'classnames';
 import Loader from '../common/Loader/Loader';
+import FormLoader from '../common/FormLoader/FormLoader';
 
 export type LoginFormData = {
   login: string
@@ -19,7 +20,7 @@ const LoginForm: FC = () => {
   return (
     <div className={Style.formContainer}>
       <Formik initialValues={{login: '', password: ''}} onSubmit={(formData, helpers) => {
-        login(formData.login, formData.password, helpers);
+        login(formData, helpers);
       }}>
         {({isSubmitting, status}) => {
           return (
@@ -36,10 +37,7 @@ const LoginForm: FC = () => {
               <button className={Style.button}>Войти</button>
 
               <div>{status}</div>
-
-              {isSubmitting && <div className={Style.formLoader}>
-                <Loader/>
-              </div>}
+              <FormLoader isSubmitting={isSubmitting} />
             </Form>
           );
         }

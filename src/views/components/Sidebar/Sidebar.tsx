@@ -27,10 +27,10 @@ const Sidebar: FC = () => {
         <img className={Style.profileImage} src={!!profileImage ? profileImage : ''} alt={''}/>
       </div>
       <div className={Style.profileName}>{profileName}</div>
-      <div className={Style.logout} onClick={handlerOpenSettings}>Настройки</div>
+      <div className={Style.logout} onClick={handlerOpenSettings} >Настройки</div> {/*style={{marginTop: 'auto'}}*/}
       <div className={Style.logout} onClick={logout}>Выйти</div>
-
       <NavSidebarContainer/>
+
 
       <ProfileSettings isOpen={isOpenSettings} handlerClose={handlerCloseSettings}/>
     </div>

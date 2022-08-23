@@ -5,6 +5,7 @@ import axios from 'axios';
 import {FormikHelpers} from 'formik';
 import {Profile} from './models';
 import {Dispatch} from 'redux';
+import {UserService} from '../../api/UserService';
 
 const setProfile = (profile: Profile, dispatch: Dispatch) => {
   dispatch(actions.setProfile({
@@ -37,10 +38,10 @@ const operations = {
     dispatch(actions.setIsInitialized(true));
 
   },
-  login: (login: string, password: string, helpers: FormikHelpers<LoginFormDara>): ThunkActionType => async (dispatch) => {
+  login: (formData: LoginFormDara, helpers: FormikHelpers<LoginFormDara>): ThunkActionType => async (dispatch) => {
     try {
       const statusCookie = await AuthService.getCookie();
-      const profile = await AuthService.login(login, password);
+      const profile = await AuthService.login(formData.login, formData.password);
       setProfile(profile, dispatch);
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -70,6 +71,11 @@ const operations = {
     if (state.profile.token) {
       AuthService.createEcho(state.profile.token);
     }
+  },
+  updateProfile: (formData: Profile, helpers: FormikHelpers<Profile>): ThunkActionType => async (dispatch) => {
+    const updatedProfile = await UserService.updateProfile(formData);
+    setProfile(updatedProfile, dispatch);
+    helpers.setSubmitting(false);
   },
 };
 
