@@ -1,0 +1,47 @@
+.header {
+    display: flex;
+    width: 100%;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 27px;
+    line-height: 150%;
+    color: rgba(0, 0, 0, 0.8);
+    margin-right: 32px;
+}
+
+.actions {
+    margin-left: auto;
+}
+
+.btnAdd {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-weight: 500;
+    color: #000000!important;
+    text-transform: none!important;
+}
+
+/*.btnAdd svg:before {*/
+/*    content: '+';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    width: 32px;*/
+/*    height: 32px;*/
+/*    border-radius: 50%;*/
+/*    background: #317EF6;*/
+/*}*/
+
+.btnAdd svg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #317EF6;
+    padding: 4px;
+    color: #ffffff;
+    margin-left: 15px;
+}

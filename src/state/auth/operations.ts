@@ -3,11 +3,11 @@ import {ThunkActionType} from '../store';
 import {AuthService} from '../../api/AuthService';
 import axios from 'axios';
 import {FormikHelpers} from 'formik';
-import {Profile} from './models';
+import {IProfile} from './models';
 import {Dispatch} from 'redux';
 import {UserService} from '../../api/UserService';
 
-const setProfile = (profile: Profile, dispatch: Dispatch) => {
+const setProfile = (profile: IProfile, dispatch: Dispatch) => {
   dispatch(actions.setProfile({
     id: profile.id,
     first_name: profile.first_name,
@@ -72,7 +72,7 @@ const operations = {
       AuthService.createEcho(state.profile.token);
     }
   },
-  updateProfile: (formData: Profile, helpers: FormikHelpers<Profile>): ThunkActionType => async (dispatch) => {
+  updateProfile: (formData: IProfile, helpers: FormikHelpers<IProfile>): ThunkActionType => async (dispatch) => {
     const updatedProfile = await UserService.updateProfile(formData);
     setProfile(updatedProfile, dispatch);
     helpers.setSubmitting(false);

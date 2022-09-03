@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import App from './App.tsx';
 import {Provider} from 'react-redux';
 import reduxStore from './state/store';
 import {BrowserRouter} from 'react-router-dom';
+import App from './App';
 
+// @ts-ignore
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -14,7 +15,7 @@ root.render(
     <BrowserRouter>
       <App/>
     </BrowserRouter>
-  </Provider>
+  </Provider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

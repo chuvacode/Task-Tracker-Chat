@@ -1,9 +1,9 @@
 import * as types from './types';
-import {Profile} from './models';
+import {IProfile} from './models';
 import {InferActionType} from '../store';
 
 const actions = {
-    setProfile: (profile: Profile) => ({
+    setProfile: (profile: IProfile) => ({
         type: types.SET_PROFILE,
         payload: {
             profile,

@@ -1,4 +1,3 @@
-// @ts-ignore
 import Style from './ChatHeader.module.css';
 import React, {FC} from 'react';
 import {declination} from '../../../utils';

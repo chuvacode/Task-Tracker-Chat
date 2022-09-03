@@ -12,7 +12,7 @@ const Sidebar: FC = () => {
   const profileName = useAppSelector(authSelectors.getProfileFullName);
   const {logout} = useActions();
 
-  const [isOpenSettings, setIsOpenSettings] = useState(true);
+  const [isOpenSettings, setIsOpenSettings] = useState(false);
 
   const handlerOpenSettings = () => {
     setIsOpenSettings(true);
@@ -26,9 +26,9 @@ const Sidebar: FC = () => {
       <div className={Style.profileImageContainer}>
         <img className={Style.profileImage} src={!!profileImage ? profileImage : ''} alt={''}/>
       </div>
-      <div className={Style.profileName}>{profileName}</div>
-      <div className={Style.logout} onClick={handlerOpenSettings} >Настройки</div> {/*style={{marginTop: 'auto'}}*/}
-      <div className={Style.logout} onClick={logout}>Выйти</div>
+      <div className={Style.btn}  onClick={handlerOpenSettings}>{profileName}</div>
+      {/*<div className={Style.logout} >Настройки</div> /!*style={{marginTop: 'auto'}}*!/*/}
+      <div className={Style.btn} onClick={logout}>Выйти</div>
       <NavSidebarContainer/>
 
 

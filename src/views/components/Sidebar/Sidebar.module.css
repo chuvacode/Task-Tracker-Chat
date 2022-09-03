@@ -31,18 +31,11 @@
     filter: drop-shadow(0px 8.05972px 16.1194px rgba(31, 6, 183, 0.08));
 }
 
-.profileName {
-    text-align: center;
-    padding: 10px 20px;
-    background: rgba(227, 227, 247, 0.3);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 14px;
-    letter-spacing: 0.02em;
-    color: #262F56;
+.btn:hover {
+    background: rgba(227, 227, 247, 0.5);
 }
 
-.logout {
+.btn {
     cursor: pointer;
     text-align: center;
     padding: 10px 20px;
@@ -52,8 +45,4 @@
     line-height: 14px;
     letter-spacing: 0.02em;
     color: #262F56;
-}
-
-.logout:hover {
-    background: rgba(227, 227, 247, 0.5);
 }

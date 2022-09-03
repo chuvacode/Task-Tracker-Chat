@@ -1,4 +1,4 @@
-export type Profile = {
+export interface IProfile {
     id: number | null
     first_name: string | null
     last_name: string | null

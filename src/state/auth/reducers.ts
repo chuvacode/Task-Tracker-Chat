@@ -1,5 +1,5 @@
 import * as types from './types';
-import {Profile} from './models';
+import {IProfile} from './models';
 import {ActionTypes} from './actions';
 
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
         first_name: null,
         last_name: null,
         avatar_url: null,
-    } as Profile,
+    } as IProfile,
 };
 
 export type InitialStateType = typeof initialState;

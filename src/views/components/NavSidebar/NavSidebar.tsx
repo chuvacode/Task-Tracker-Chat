@@ -24,6 +24,9 @@ const NavSidebar: FC = () => {
         Сообщения
         {countUnread > 0 ? <span className={Style.counter}>{countUnread}</span> : ''}
       </NavLink>
+      <NavLink className={Style.link + ' ' + Style.linkActive} to={RouteNames.CLIENTS}>
+        Клиенты
+      </NavLink>
       {/*<NavLink className={Style.link} to="/task-line">*/}
       {/*    Лента задач*/}
       {/*    <span className={Style.counter}>12</span>*/}

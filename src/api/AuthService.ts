@@ -27,7 +27,6 @@ const authorizeChannel = (token: string) => (channel: any, options: any) => {
 };
 export let WS: Echo;
 
-
 type FetchProfile = {
   id: number
   username: string
@@ -53,14 +52,10 @@ export const AuthService = {
   getMe: () => {
     return api.get<FetchProfile>('get-me')
       .then(response => response.data);
-      // .catch(reason => new Error('123'));
   },
   getToken: () => {
     return api.post('sanctum/token')
-      .then(response => response.data)
-      .catch(reason => {
-        throw reason.response;
-      });
+      .then(response => response.data);
   },
   createEcho: (token: string) => {
     WS = new Echo({
